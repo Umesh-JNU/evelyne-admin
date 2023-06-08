@@ -1,49 +1,272 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useNavigate } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import reducer from "./state/reducer";
-import { create, getUsers, getWarehouses } from "./state/action";
-import { useTitle, MotionDiv } from "../../components";
-import {
-  Button,
-  Card,
-  Form,
-  Row,
-  Col,
-  Spinner,
-  Table,
-} from "react-bootstrap";
+import { create } from "./state/action";
+import { useTitle, MotionDiv, AutocompleteSearch, CustomForm, TextInput } from "../../components";
+import { Button, Row, Col, Table } from "react-bootstrap";
 import { toastOptions } from "../../utils/error";
-import { clearErrors } from "../../states/actions";
 
-export default function AddController() {
-  const navigate = useNavigate();
+export default function AddOrder() {
   const { state } = useContext(Store);
   const { token } = state;
 
-  const [{ loading, loadingAdd, error, success, users, warehouses }, dispatch] = useReducer(reducer, {
+  const [{ loading, loadingAdd, error, success }, dispatch] = useReducer(reducer, {
     loading: false,
     loadingAdd: false,
     error: "",
   });
 
+  const orderData = {
+    tin_no: "",
+    address: "",
+    transit_company: "",
+    consignee: "",
+    custom_agent: "",
+    DDCOM_no: "",
+    quantity_decl: "",
+    physical_quant: "",
+    arrival_date: "",
+    last_storage_date: "",
+    truck_no: "",
+    container_no: "",
+    transporter: "",
+    ref_no: "",
+    desc_product: "",
+    unit: "",
+    comment: "",
+    name_counter: "",
+    counter_valid: false,
+    name_manager: "",
+    manager_valid: false,
+    customs: "",
+    client_valid: false,
+    status: "in-bound",
+    items: [],
+    warehouse: "",
+    user: ""
+  }
+
+  const orderAttr = [
+    {
+      type: "number",
+      props: {
+        type: "number",
+        label: "Tin No",
+        name: "tin_no",
+        value: orderData.tin_no,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Address",
+        name: "address",
+        value: orderData.address,
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Transit Company",
+        name: "transit_company",
+        value: orderData.transit_company,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Consignee",
+        name: "consignee",
+        value: orderData.consignee,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Custom Agent",
+        name: "custom_agent",
+        value: orderData.custom_agent,
+      }
+    },
+    {
+      type: "number",
+      props: {
+        type: "number",
+        label: "DDCOM No",
+        name: "DDCOM_no",
+        value: orderData.DDCOM_no,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Quantity Declaration",
+        name: "quantity_decl",
+        value: orderData.quantity_decl,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Physical Quantity",
+        name: "physical_quant",
+        value: orderData.physical_quant,
+      }
+    },
+    {
+      type: "date",
+      props: {
+        type: "date",
+        label: "Arrival Date",
+        name: "arrival_date",
+        value: orderData.arrival_date,
+        required: true,
+      }
+    },
+    {
+      type: "date",
+      props: {
+        type: "date",
+        label: "Last Storage Date",
+        name: "last_storage_date",
+        value: orderData.last_storage_date,
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Truck No",
+        name: "truck_no",
+        value: orderData.truck_no,
+      }
+    },
+    {
+      type: "number",
+      props: {
+        type: "number",
+        label: "Container No",
+        name: "container_no",
+        value: orderData.container_no,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Transporter",
+        name: "transporter",
+        value: orderData.transporter,
+      }
+    },
+    {
+      type: "number",
+      props: {
+        type: "number",
+        label: "Ref No",
+        name: "ref_no",
+        value: orderData.ref_no,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Description of Product",
+        name: "desc_product",
+        value: orderData.desc_product,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Unit",
+        name: "unit",
+        value: orderData.unit,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Comment",
+        name: "comment",
+        value: orderData.comment,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Customs",
+        name: "customs",
+        value: orderData.customs,
+      }
+    },
+    {
+      type: "text",
+      props: {
+        label: "Name Counter",
+        name: "name_counter",
+        value: orderData.name_counter,
+      }
+    },
+    {
+      type: "select",
+      props: {
+        label: "Status",
+        name: "status",
+        value: orderData.status,
+        placeholder: "Select Status",
+        options: [{ "arrived": "Arrived" }, { "in-bound": "In-Bound" }, { "out-bound": "Out-Bound" }]
+      }
+    },
+    {
+      type: "check",
+      col: 4,
+      props: {
+        checklabel: "Counter Validation",
+        name: "counter_valid",
+        value: orderData.counter_valid,
+      }
+    },
+    {
+      type: "check",
+      col: 4,
+      props: {
+        checklabel: "Manager Approval",
+        name: "manager_valid",
+        value: orderData.manager_valid,
+      }
+    },
+    {
+      type: "check",
+      col: 4,
+      props: {
+        checklabel: "Client Validation",
+        name: "client_valid",
+        value: orderData.client_valid,
+      }
+    },
+  ];
   const [item, setItem] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [info, setInfo] = useState({
-    warehouse: "",
-    user: "",
-    items: [],
-    address: "",
-  });
+  const [user, setUser] = useState();
+  const [warehouse, setWarehouse] = useState();
+  const [info, setInfo] = useState(orderData);
 
-  const handleInput = (e) => {
-    setInfo({ ...info, [e.target.name]: e.target.value });
+  const setUserHandler = (user) => {
+    setInfo({ ...info, user: user.id });
+    setUser(user);
+  };
+
+  const setWarehouseHandler = (warehouse) => {
+    console.log({ warehouse })
+    setInfo({ ...info, warehouse: warehouse.id });
+    setWarehouse(warehouse);
   };
 
   const itemHandler = () => {
-    // console.log(item, quantity, typeof quantity);
+    console.log(item, quantity, typeof quantity);
     if (!item) {
       toast.warning("Item can't be empty.", toastOptions);
       return;
@@ -58,22 +281,19 @@ export default function AddController() {
   };
 
   const resetForm = () => {
-    setInfo({
-      warehouse: "",
-      user: "",
-      items: [],
-      address: "",
-    });
+    setInfo(orderData);
+    setUser();
+    setWarehouse();
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!info.warehouse) {
-      toast.warning("Please select a warehouse.", toastOptions);
-      return;
-    }
     if (!info.user) {
       toast.warning("Please select a user.", toastOptions);
+      return;
+    }
+    if (!info.warehouse) {
+      toast.warning("Please select a warehouse.", toastOptions);
       return;
     }
     if ((info.items && info.items.length === 0) || !info.items) {
@@ -85,192 +305,143 @@ export default function AddController() {
     resetForm();
   };
 
-  useEffect(() => {
-    if (loadingAdd)
-      toast.success("Order Created Succesfully!", toastOptions);
-
-    if (success) {
-      navigate("/admin/orders");
-    }
-
-    (async () => {
-      await getWarehouses(dispatch, token);
-      await getUsers(dispatch, token);
-    })();
-  }, [success, loadingAdd]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error, toastOptions);
-      clearErrors(dispatch);
-    }
-  }, [error]);
-
   useTitle("Create Order");
   return (
     <MotionDiv>
-      <Row
-        className="mt-2 mb-3"
-        style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
+      <CustomForm
+        title="Add Order"
+        data={info}
+        setData={setInfo}
+        inputFieldProps={orderAttr}
+        submitHandler={submitHandler}
+        target="/admin/orders"
+        successMessage="Order Created Successfully!"
+        reducerProps={{ loading: loadingAdd, error, success, dispatch }}
       >
-        <Col>
-          <span style={{ fontSize: "xx-large" }}>Add Order</span>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Header as={"h4"}>Add Details</Card.Header>
-            <Form onSubmit={submitHandler}>
-              <Card.Body>
-                <Form.Group className="mb-3">
-                  <Form.Label className="mr-3">Warehouse</Form.Label>
-                  <Form.Select
-                    aria-label="Select Warehouse"
-                    aria-controls="warehouse"
-                    value={info.warehouse}
-                    name="warehouse"
-                    onChange={handleInput}
-                  >
-                    <option key="blankChoice" hidden value>
-                      {warehouses && warehouses.length > 0 ? "Select Warehouse" : "No Warehouse"}
-                    </option>
-                    {warehouses &&
-                      warehouses.map((house) => (
-                        <option key={house.id} value={house.id}>
-                          {house.name}
-                        </option>
-                      ))}
-                  </Form.Select>
-                </Form.Group>
+        <>
+          <Row>
+            <Col md={2}>Select User</Col>
+            <Col md={4}>
+              <AutocompleteSearch onSelect={setUserHandler} searchType="user" />
+            </Col>
+            <Col md={6}>{user && <div className='d-flex '>
+              <div className='me-3'>
+                <img src={user.avatar} alt="img" width={50} height={50} />
+              </div>
+              <div>
+                <span style={{ fontWeight: "700" }}>{user.fullname}</span>
+                <hr style={{ margin: "0px", color: "#36454F" }} />
+                <span style={{ fontSize: "0.9rem" }}>{`${user.city}, ${user.country}`}</span>
+                <hr style={{ margin: "0px", color: "#36454F" }} />
+                <span style={{ fontSize: "0.9rem" }}>{user.email}</span>
+                <hr style={{ margin: "0px", color: "#36454F" }} />
+                <span style={{ fontSize: "0.9rem" }}>{user.mobile_no}</span>
+                <hr style={{ margin: "0px", color: "#36454F" }} />
+              </div>
+            </div>}
+            </Col>
+            <Col md={2} className="mt-3">Select Warehouse</Col>
+            <Col md={4} className="mt-3">
+              <AutocompleteSearch onSelect={setWarehouseHandler} searchType="warehouse" />
+            </Col>
 
-                <Form.Group className="mb-3">
-                  <Form.Label className="mr-3">User</Form.Label>
-                  <Form.Select
-                    aria-label="Select User"
-                    aria-controls="user"
-                    value={info.user}
-                    name="user"
-                    onChange={handleInput}
-                  >
-                    <option key="blankChoice" hidden value>
-                      {users && users.length > 0 ? "Select User" : "No User"}
-                    </option>
-                    {users &&
-                      users.map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.fullname}
-                        </option>
-                      ))}
-                  </Form.Select>
-                </Form.Group>
+            <Col md={6} className="mt-3">
+              {warehouse &&
+                <div className='d-flex '>
+                  <div className='me-3'>
+                    <img src={warehouse.image} alt="img" width={50} height={50} />
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: "700" }}>{warehouse.name}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}>{warehouse.manager?.fullname}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}>{warehouse.controller?.fullname}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                  </div>
+                </div>
+              }
+            </Col>
+          </Row>
 
-                <Form.Group className="mb-3" controlId="address">
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control
-                    value={info.address}
-                    name="address"
-                    onChange={handleInput}
-                    required
-                  />
-                </Form.Group>
+          <h3>Add Items</h3>
+          <Row>
+            <Col md={5}>
+              <TextInput
+                value={item}
+                label="Item"
+                onChange={(e) => setItem(e.target.value)}
+              />
+            </Col>
+            <Col md={5}>
+              <TextInput
+                label="Quantity"
+                type="number"
+                min={0}
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+              />
+            </Col>
+            <Col md={2}>
+              <Button className="mt-4" onClick={itemHandler}>
+                Add Item
+              </Button>
+            </Col>
+          </Row>
 
-                <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3" controlId="item">
-                      <Form.Label>Item</Form.Label>
-                      <Form.Control
-                        value={item}
-                        onChange={(e) => setItem(e.target.value)}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3" controlId="quantity">
-                      <Form.Label>Quantity</Form.Label>
-                      <Row>
-                        <Col md={7}>
-                          <Form.Control
-                            type="number"
-                            min={0}
-                            value={quantity}
-                            onChange={(e) => setQuantity(e.target.value)}
-                          />
-                        </Col>
-                        <Col md={5}>
-                          <Button onClick={itemHandler}>
-                            Add Item
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  {info.items && info.items.length > 0 && (
-                    <Table responsive striped bordered hover>
-                      <thead>
-                        <tr>
-                          <th>Item</th>
-                          <th>Qauntity</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {info.items.map(({ name, quantity }, i) => (
-                          <tr key={name}       >
-                            <td>{name}</td>
-                            <td>{quantity}</td>
-                            <td>
-                              <Button
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  const index = info.items.findIndex(
-                                    (i) =>
-                                      i.name === name &&
-                                      i.quantity === quantity
-                                  );
-                                  console.log({ index });
-                                  if (index > -1) {
-                                    // only splice array when item is found
+          <Row className="mt-3">
+            {info.items && info.items.length > 0 && (
+              <Table responsive striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Item</th>
+                    <th>Qauntity</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {info.items.map(({ name, quantity }, i) => (
+                    <tr key={name}       >
+                      <td>{name}</td>
+                      <td>{quantity}</td>
+                      <td>
+                        <Button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const index = info.items.findIndex(
+                              (i) =>
+                                i.name === name &&
+                                i.quantity === quantity
+                            );
+                            console.log({ index });
+                            if (index > -1) {
+                              // only splice array when item is found
 
-                                    setInfo({
-                                      ...info, items: [
-                                        ...info.items.slice(0, index),
+                              setInfo({
+                                ...info, items: [
+                                  ...info.items.slice(0, index),
 
-                                        // part of the array after the given item
-                                        ...info.items.slice(index + 1),
-                                      ]
-                                    });
-                                  }
-                                }}
-                                type="danger"
-                                className="btn btn-danger btn-block"
-                              >
-                                Delete
-                              </Button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </Table>
-                  )}
-                </Row>
-              </Card.Body>
-              <Card.Footer>
-                <Button type="submit" disabled={loadingAdd ? true : false}>
-                  {loadingAdd ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </Card.Footer>
-              <ToastContainer />
-            </Form>
-          </Card>
-        </Col>
-      </Row>
+                                  // part of the array after the given item
+                                  ...info.items.slice(index + 1),
+                                ]
+                              });
+                            }
+                          }}
+                          type="danger"
+                          className="btn btn-danger btn-block"
+                        >
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+          </Row>
+        </>
+      </CustomForm>
+      <ToastContainer />
     </MotionDiv >
   );
 }

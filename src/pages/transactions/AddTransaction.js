@@ -1,23 +1,14 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useNavigate } from "react-router-dom";
 
 import { ToastContainer, toast } from "react-toastify";
 import reducer from "./state/reducer";
-import { getOrders, create } from "./state/action";
-import { useTitle, MotionDiv } from "../../components";
-import {
-  Button,
-  Card,
-  Form,
-  Row,
-  Col,
-  Spinner,
-} from "react-bootstrap";
+import { create } from "./state/action";
+import { useTitle, MotionDiv, CustomForm, AutocompleteSearch } from "../../components";
+import { Row, Col } from "react-bootstrap";
 import { toastOptions } from "../../utils/error";
 
 export default function AddController() {
-  const navigate = useNavigate();
   const { state } = useContext(Store);
   const { token } = state;
 
@@ -27,14 +18,52 @@ export default function AddController() {
     error: "",
   });
 
-  const [info, setInfo] = useState({
+  const transactionData = {
     orderId: "",
     amount: "",
-    mode: "",
-  });
+    mode: "cash",
+    status: "processing",
+  };
+  const [info, setInfo] = useState(transactionData);
+  const [order, setOrder] = useState();
 
-  const handleInput = (e) => {
-    setInfo({ ...info, [e.target.name]: e.target.value });
+  const attr = [
+    {
+      type: "number",
+      col: 12,
+      props: {
+        label: "Amount",
+        name: "amount",
+        required: true,
+      }
+    },
+    {
+      type: "select",
+      col: 12,
+      props: {
+        label: "Mode",
+        name: "mode",
+        value: info.mode,
+        placeholder: "Select Mode",
+        options: [{ "cash": "Cash" }, { "card": "Card" }, { "bank": "Bank" }]
+      }
+    },
+    {
+      type: "select",
+      col: 12,
+      props: {
+        label: "Status",
+        name: "status",
+        value: info.status,
+        placeholder: "Select Status",
+        options: [{ "paid": "Paid" }, { "processing": "Processing" }, { "failed": "Failed" }]
+      }
+    },
+  ];
+
+  const setOrderHandler = (order) => {
+    setInfo({ ...info, orderId: order.id });
+    setOrder(order);
   };
 
   const resetForm = () => {
@@ -42,118 +71,65 @@ export default function AddController() {
       orderId: "",
       amount: "",
       mode: "",
+      status: "",
     });
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    if (!info.orderId) {
+      toast.warning("Please select an order.", toastOptions);
+      return;
+    }
 
     await create(dispatch, token, info);
     resetForm();
   };
 
-  useEffect(() => {
-    if (loadingAdd)
-      toast.success("Transaction Created Succesfully!", toastOptions);
-
-    if (success)
-      navigate("/admin/transactions");
-
-    (async () => {
-      await getOrders(dispatch, token);
-    })();
-
-  }, [success, loadingAdd]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error, toastOptions);
-    }
-  }, [error]);
-
   useTitle("Create Transaction");
   return (
     <MotionDiv>
-      <Row
-        className="mt-2 mb-3"
-        style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
+      <CustomForm
+        title="Add Transaction"
+        data={info}
+        setData={setInfo}
+        inputFieldProps={attr}
+        submitHandler={submitHandler}
+        target="/admin/transactions"
+        successMessage="Transaction Created Successfully!"
+        reducerProps={{ loading: loadingAdd, error, success, dispatch }}
       >
-        <Col>
-          <span style={{ fontSize: "xx-large" }}>Add Transaction</span>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Header as={"h4"}>Add Details</Card.Header>
-            <Form onSubmit={submitHandler}>
-              <Card.Body>
-                <Form.Group className="mb-3">
-                  <Form.Label className="mr-3">Order</Form.Label>
-                  <Form.Select
-                    aria-label="Select Order"
-                    aria-controls="orderId"
-                    value={info.orderId}
-                    name="orderId"
-                    onChange={handleInput}
-                  >
-                    <option key="blankChoice" hidden value>
-                      Select Order
-                    </option>
-                    {orders &&
-                      orders.map((order) => (
-                        <option key={order.id} value={order.id}>
-                          {order.id}
-                        </option>
-                      ))}
-                  </Form.Select>
-                </Form.Group>
+        <Row>
+          <Col md={2}>Select Order</Col>
+          <Col md={4}>
+            <AutocompleteSearch onSelect={setOrderHandler} searchType="order" />
+          </Col>
 
-                <Form.Group className="mb-3" controlId="amount">
-                  <Form.Label>Amount</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min={0}
-                    value={info.amount}
-                    name="amount"
-                    onChange={(e) => { setInfo({ ...info, amount: parseInt(e.target.value) }) }}
-                    required
-                  />
-                </Form.Group>
+          <Col md={6} className="mt-3">
+            {order &&
+              <div className='d-flex '>
+                <div className='me-3'>
+                  <img src={order.user?.avatar} alt="img" width={50} height={50} />
+                </div>
 
-                <Form.Group className="mb-3">
-                  <Form.Label className="mr-3">Mode</Form.Label>
-                  <Form.Select
-                    aria-label="Select Mode"
-                    aria-controls="mode"
-                    value={info.mode}
-                    name="mode"
-                    onChange={handleInput}
-                  >
-                    <option key="blankChoice" hidden value>
-                      Select Mode
-                    </option>
-
-                    <option value={"cash"}>Cash</option>
-                    <option value={"card"}>Card</option>
-                    <option value={"bank"}>Bank</option>
-                  </Form.Select>
-                </Form.Group>
-              </Card.Body>
-              <Card.Footer>
-                <Button type="submit" disabled={loadingAdd ? true : false}>
-                  {loadingAdd ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </Card.Footer>
-              <ToastContainer />
-            </Form>
-          </Card>
-        </Col>
-      </Row>
+                <div>
+                  <span><b>Order Id - {order.id}</b></span>
+                  <hr style={{ margin: "0px", color: "#36454F" }} />
+                  <span style={{ fontSize: "0.9rem" }}><b>Qty: </b>{order.items?.length}</span>
+                  <hr style={{ margin: "0px", color: "#36454F" }} />
+                  <span style={{ fontSize: "0.9rem" }}><b>Status: </b>{order.status}</span>
+                  <hr style={{ margin: "0px", color: "#36454F" }} />
+                  <span style={{ fontSize: "0.9rem" }}><b>User: </b>{order.user?.fullname}</span>
+                  <hr style={{ margin: "0px", color: "#36454F" }} />
+                  <span style={{ fontSize: "0.9rem" }}><b>Warehouse: </b>{order.warehouse?.name}</span>
+                  <hr style={{ margin: "0px", color: "#36454F" }} />
+                </div>
+              </div>
+            }
+          </Col>
+        </Row>
+      </CustomForm>
+      <ToastContainer />
     </MotionDiv>
   );
 }

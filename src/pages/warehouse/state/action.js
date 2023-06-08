@@ -88,3 +88,19 @@ export const getDetails = async (dispatch, token, id) => {
     });
   }
 };
+
+export const updateWarehouse = async (dispatch, token, inputInfo) => {
+  try {
+    dispatch({ type: "UPDATE_REQUEST" });
+
+    await axiosInstance.put(`/api/admin/warehouse/assign`, inputInfo, {
+      headers: { Authorization: token },
+    });
+
+    setTimeout(() => {
+      dispatch({ type: "UPDATE_SUCCESS" });
+    }, 1500);
+  } catch (err) {
+    dispatch({ type: "UPDATE_FAIL" });
+  }
+};

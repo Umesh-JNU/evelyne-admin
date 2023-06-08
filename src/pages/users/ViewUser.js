@@ -47,10 +47,13 @@ const ViewUser = () => {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <ViewCard
+          title={user && `${user.fullname} Details`}
           data={{ ...user, role: user?.userRole?.role }}
           loading={loading}
           setModalShow={setModalShow}
-          keyProps={{ "Fullname": "fullname", "Fullname": "fullname", "Email": "email", "Mobile No.": "mobile_no", "Country": "country", "City": "city", "Role": "role" }}
+          isImage={true}
+          image_url={user?.avatar}
+          keyProps={{ "Fullname": "fullname", "Fullname": "fullname", "Email": "email", "Mobile No.": "mobile_no", "Country": "country", "City": "city", "Role": "role", "Created At": "createdAt", "Last Update": "updatedAt" }}
         />
       )}
       <EditUserModel

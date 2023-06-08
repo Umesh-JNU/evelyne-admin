@@ -347,6 +347,7 @@ table.table {
 
 .autocomplete-list {
   position: absolute;
+  z-index: 1;
   width: 100%;
 
 }
@@ -371,4 +372,15 @@ table.table {
 .bg-color.active {
   background: #011831;
   color: white;
+}
+
+.form-check-input {
+  width: 20px;
+  height: 20px;
+  background-color: #cdd8f5;
+}
+
+.checkbox>.form-check-input {
+  width: 30px;
+  height: 30px;
 }

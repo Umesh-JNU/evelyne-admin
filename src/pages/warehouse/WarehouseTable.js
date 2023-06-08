@@ -10,10 +10,12 @@ import {
   CustomTable,
   ViewButton,
   DeleteButton,
+  ArrayView
 } from "../../components";
 import warehouseReducer from "./state/reducer";
 import { getAll, del } from "./state/action";
 import { toastOptions } from "../../utils/error";
+import { IoMdOpen } from "react-icons/io";
 
 export default function Warehouse() {
   const navigate = useNavigate();
@@ -26,6 +28,13 @@ export default function Warehouse() {
   const [query, setQuery] = useState("");
 
   const curPageHandler = (p) => setCurPage(p);
+  const [modalShow, setModalShow] = useState(false);
+  const [controllers, setControllers] = useState([]);
+  const showModelHandler = (ls) => {
+    // // console.log("product_list", ls);
+    setControllers([...ls]);
+    setModalShow(true);
+  };
 
   const [{ loading, error, warehouses, warehousesCount }, dispatch] =
     useReducer(warehouseReducer, {
@@ -54,6 +63,7 @@ export default function Warehouse() {
 
   const column = [
     "S.No",
+    "Image",
     "Name",
     "Capacity",
     "Filled",
@@ -85,11 +95,28 @@ export default function Warehouse() {
             warehouses.map((warehouse, i) => (
               <tr key={warehouse.id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
+                <td>
+                  <img
+                    className="td-img"
+                    src={warehouse.image}
+                    alt=""
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </td>
                 <td>{warehouse.name}</td>
                 <td>{warehouse.capacity}</td>
                 <td>{warehouse.filled}</td>
-                <td>{warehouse.manager ? warehouse.manager.fullname: (<strong>Not Assigned</strong>)}</td>
-                <td>{warehouse.controller ? warehouse.controller.fullname: (<strong>Not Assigned</strong>)}</td>
+                <td>{warehouse.manager ? warehouse.manager.fullname : (<strong>Not Assigned</strong>)}</td>
+                <td>
+                  <IoMdOpen
+                    className="open-model"
+                    onClick={() => showModelHandler(warehouse.controller)}
+                  />
+                </td>
                 <td>
                   <ViewButton
                     onClick={() => navigate(`/admin/view/warehouse/${warehouse.id}`)}
@@ -99,6 +126,17 @@ export default function Warehouse() {
               </tr>
             ))}
         </CustomTable>
+      )}
+      {controllers && modalShow ? (
+        <ArrayView
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+          arr={controllers}
+          column={{ "Id": "id", "Fullname": "fullname" }}
+          title="Controllers List"
+        />
+      ) : (
+        <></>
       )}
       <ToastContainer />
     </MotionDiv>

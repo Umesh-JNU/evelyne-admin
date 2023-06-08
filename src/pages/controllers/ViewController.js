@@ -49,12 +49,15 @@ const ViewController = () => {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <ViewCard
-          data={controller}
+        title={controller && `${controller.fullname} Details`}
+        data={controller}
           loading={loading}
           setModalShow={setModalShow}
-          keyProps={{ "Fullname": "fullname", "Email": "email", "Mobile No.": "mobile_no", "Country": "country", "City": "city" }}
+          isImage={true}
+          image_url={controller?.avatar}
+          keyProps={{ "Fullname": "fullname", "Email": "email", "Mobile No.": "mobile_no", "Country": "country", "City": "city", "Created At": "createdAt", "Last Update": "updatedAt" }}
         >
-          <Row className="mb-3">
+          <Row className="my-4">
             <h2>Warehouse Details</h2>
             <Col md={3}>
               <Button onClick={() => { setShowHouseModel(true) }}>Add/Change Warehouse</Button>

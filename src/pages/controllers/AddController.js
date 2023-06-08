@@ -1,24 +1,12 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { clearErrors } from "../../states/actions";
-import { useNavigate } from "react-router-dom";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import reducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, MotionDiv } from "../../components";
-import {
-  Button,
-  Card,
-  Form,
-  Row,
-  Col,
-  Spinner,
-} from "react-bootstrap";
-import { toastOptions } from "../../utils/error";
+import { useTitle, MotionDiv, CustomForm } from "../../components";
 
 export default function AddController() {
-  const navigate = useNavigate();
   const { state } = useContext(Store);
   const { token } = state;
 
@@ -28,146 +16,98 @@ export default function AddController() {
     error: "",
   });
 
-  const [info, setInfo] = useState({
+  const controllerData = {
     fullname: "",
     email: "",
     password: "",
     mobile_no: "",
     country: "",
-    city: "",
-  });
-
-  const handleInput = (e) => {
-    setInfo({ ...info, [e.target.name]: e.target.value });
+    city: ""
   };
+  const controllerAttr = [
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Controller's Fullname",
+        name: "fullname",
+        required: true,
+      }
+    },
+    {
+      type: "email",
+      col: 12,
+      props: {
+        type: "email",
+        label: "Email",
+        name: "email",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Mobile No.",
+        name: "mobile_no",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Password",
+        name: "password",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Country",
+        name: "country",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "City",
+        name: "city",
+        required: true,
+      }
+    }
+  ]
+  const [info, setInfo] = useState(controllerData);
 
   const resetForm = () => {
-    setInfo({
-      fullname: "",
-      email: "",
-      password: "",
-      mobile_no: "",
-      country: "",
-      city: "",
-    });
-  };
+    setInfo(controllerData);
+  }
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
     await create(dispatch, token, info);
     resetForm();
-
-
   };
-
-  useEffect(() => {
-    // if (loadingAdd)
-
-    if (success) {
-      toast.success("Controller Created Succesfully!", toastOptions);
-      setTimeout(() => {navigate("/admin/controllers");}, 2000);
-    }
-  }, [success]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error, toastOptions);
-      clearErrors(dispatch);
-    }
-  }, [error]);
 
   useTitle("Create Controller");
   return (
     <MotionDiv>
-      <Row
-        className="mt-2 mb-3"
-        style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
-      >
-        <Col>
-          <span style={{ fontSize: "xx-large" }}>Add Controller</span>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Header as={"h4"}>Add Details</Card.Header>
-            <Form onSubmit={submitHandler}>
-              <Card.Body>
-                <Form.Group className="mb-3" controlId="fullname">
-                  <Form.Label>Fullname</Form.Label>
-                  <Form.Control
-                    value={info.fullname}
-                    name="fullname"
-                    onChange={handleInput}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="email">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    value={info.email}
-                    name="email"
-                    onChange={handleInput}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="password">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    value={info.password}
-                    name="password"
-                    onChange={handleInput}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="mobile_no">
-                  <Form.Label>Mobile No.</Form.Label>
-                  <Form.Control
-                    value={info.mobile_no}
-                    name="mobile_no"
-                    onChange={handleInput}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="country">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Control
-                    value={info.country}
-                    name="country"
-                    onChange={handleInput}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="city">
-                  <Form.Label>City</Form.Label>
-                  <Form.Control
-                    value={info.city}
-                    name="city"
-                    onChange={handleInput}
-                    required
-                  />
-                </Form.Group>
-              </Card.Body>
-              <Card.Footer>
-                <Button type="submit" disabled={loadingAdd || success ? true : false}>
-                  {loadingAdd ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </Card.Footer>
-              <ToastContainer />
-            </Form>
-          </Card>
-        </Col>
-      </Row>
+      <CustomForm
+        title="Add Controller"
+        data={info}
+        setData={setInfo}
+        inputFieldProps={controllerAttr}
+        submitHandler={submitHandler}
+        target="/admin/controllers"
+        successMessage="Controller Created Successfully!"
+        reducerProps={{ loading: loadingAdd, error, success, dispatch }}
+      />
+      <ToastContainer />
     </MotionDiv>
   );
 }

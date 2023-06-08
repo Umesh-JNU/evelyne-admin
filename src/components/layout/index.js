@@ -10,6 +10,7 @@ import LoadingBox from "./LoadingBox";
 import SideNavBar from "./SideNavBar";
 import MotionDiv from "./MotionDiv";
 import ViewCard from "./ViewCard";
+import { CustomForm, TextInput, CheckInput, SelectInput } from "./CustomForm";
 
 export {
   useTitle,
@@ -26,4 +27,5 @@ export {
   SideNavBar,
   MotionDiv,
   ViewCard,
+  CustomForm, TextInput, CheckInput, SelectInput,
 };

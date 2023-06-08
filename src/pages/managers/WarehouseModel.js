@@ -93,7 +93,7 @@ export default function EditUserModel(props) {
           <Container className="small-container">
             {/* <Row> */}
             {/* <Col md={8}> */}
-            <AutocompleteSearch value={house.name} onSelect={addWarehouseHandler} />
+            <AutocompleteSearch value={house.name} onSelect={addWarehouseHandler} searchType="warehouse" />
             {/* </Col> */}
             {/* <Col md={4}>
                 <Button onClick={addWarehouseHandler}>

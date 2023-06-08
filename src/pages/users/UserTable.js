@@ -55,6 +55,7 @@ export default function Users() {
 
   const column = [
     "S.No",
+    "Image",
     "Fullname",
     "Email",
     "Mobile No.",
@@ -87,6 +88,18 @@ export default function Users() {
             users.map((user, i) => (
               <tr key={user.id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
+                <td>
+                  <img
+                    className="td-img"
+                    src={user.avatar}
+                    alt=""
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </td>
                 <td>{user.fullname}</td>
                 <td>{user.email}</td>
                 <td>{user.mobile_no}</td>

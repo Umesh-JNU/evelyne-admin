@@ -50,12 +50,15 @@ const ViewManager = () => {
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
         <ViewCard
+          title={manager && `${manager.fullname} Details`}
           data={manager}
           loading={loading}
           setModalShow={setModalShow}
-          keyProps={{ "Fullname": "fullname", "Email": "email", "Mobile No.": "mobile_no", "Country": "country", "City": "city" }}
+          isImage={true}
+          image_url={manager?.avatar}
+          keyProps={{ "Fullname": "fullname", "Email": "email", "Mobile No.": "mobile_no", "Country": "country", "City": "city", "Created At": "createdAt", "Last Update": "updatedAt" }}
         >
-          <Row>
+          <Row className="mt-4">
             <h2>Warehouse Details</h2>
             <Col md={3}>
               <Button onClick={() => { setShowHouseModel(true) }}>Add/Change Warehouse</Button>

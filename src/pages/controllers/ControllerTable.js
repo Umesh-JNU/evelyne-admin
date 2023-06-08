@@ -64,6 +64,7 @@ export default function Controllers() {
 
   const column = [
     "S.No",
+    "Image",
     "Fullname",
     "Email",
     "Mobile No.",
@@ -97,6 +98,18 @@ export default function Controllers() {
             controllers.map((controller, i) => (
               <tr key={controller.id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
+                <td>
+                  <img
+                    className="td-img"
+                    src={controller.avatar}
+                    alt=""
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </td>
                 <td>{controller.fullname}</td>
                 <td>{controller.email}</td>
                 <td>{controller.mobile_no}</td>

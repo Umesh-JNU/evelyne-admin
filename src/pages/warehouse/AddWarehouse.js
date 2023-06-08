@@ -1,24 +1,12 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useNavigate } from "react-router-dom";
 
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import warehouseReducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, MotionDiv } from "../../components";
-import {
-  Button,
-  Card,
-  Form,
-  Row,
-  Col,
-  Spinner,
-} from "react-bootstrap";
-import { toastOptions } from "../../utils/error";
-import { clearErrors } from "../../states/actions";
+import { useTitle, MotionDiv, CustomForm } from "../../components";
 
 export default function AddWarehouse() {
-  const navigate = useNavigate();
   const { state } = useContext(Store);
   const { token } = state;
 
@@ -27,20 +15,37 @@ export default function AddWarehouse() {
     error: "",
   });
 
-  const [info, setInfo] = useState({
+  const warehouseData = {
     name: "",
-    capacity: "",
-  })
+    capacity: 1000,
+    // image: "",
+  };
+  const attr = [
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Warehouse Name",
+        placeholder: "Warehouse Name",
+        name: "name",
+        required: true,
+      }
+    }, {
+      type: "number",
+      col: 12,
+      props: {
+        type: "number",
+        label: "Capacity",
+        placeholder: "Warehouse Capacity",
+        name: "capacity",
+        required: true,
+      }
+    }
+  ]
+  const [info, setInfo] = useState(warehouseData)
 
   const resetForm = () => {
-    setInfo({
-      name: "",
-      capacity: "",
-    })
-  };
-
-  const inputHandler = (e) => {
-    setInfo({ ...info, [e.target.name]: e.target.value });
+    setInfo(warehouseData);
   }
 
   const submitHandler = async (e) => {
@@ -50,78 +55,20 @@ export default function AddWarehouse() {
     resetForm();
   };
 
-  useEffect(() => {
-    if (loading) {
-      toast.success("Warehouse Added Succesfully", toastOptions);
-    }
-    if (success) {
-      navigate(-1);
-    }
-  }, [success, loading]);
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error, toastOptions);
-      clearErrors(dispatch);
-    }
-  }, [error]);
-
   useTitle("Add Warehouse");
   return (
     <MotionDiv>
-      <Row
-        className="mt-2 mb-3"
-        style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
-      >
-        <Col>
-          <span style={{ fontSize: "xx-large" }}>Add Warehouse</span>
-        </Col>
-      </Row>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Header as={"h4"}>Add Details</Card.Header>
-            <Form onSubmit={submitHandler}>
-              <Card.Body>
-                <Form.Group className="mb-3" controlId="name">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                    value={info.name}
-                    name="name"
-                    placeholder="Warehouse Name"
-                    onChange={inputHandler}
-                    required
-                  />
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="capacity">
-                  <Form.Label>Capacity</Form.Label>
-                  <Form.Control
-                    type="number"
-                    min={0}
-                    value={info.capacity}
-                    name="capacity"
-                    placeholder="Warehouse Capacity"
-                    onChange={(e) => { setInfo({ ...info, capacity: parseInt(e.target.value) }) }}
-                    required
-                  />
-                </Form.Group>
-
-              </Card.Body>
-              <Card.Footer>
-                <Button type="submit" disabled={loading ? true : false}>
-                  {loading ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
-              </Card.Footer>
-              <ToastContainer />
-            </Form>
-          </Card>
-        </Col>
-      </Row>
+      <CustomForm
+        title="Add Warehouse"
+        data={info}
+        setData={setInfo}
+        inputFieldProps={attr}
+        submitHandler={submitHandler}
+        target={-1}
+        successMessage="Warehouse Created Successfully!"
+        reducerProps={{ loading, error, success, dispatch }}
+      />
+      <ToastContainer />
     </MotionDiv >
   );
 }

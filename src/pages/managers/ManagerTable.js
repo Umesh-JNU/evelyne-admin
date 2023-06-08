@@ -55,6 +55,7 @@ export default function Managers() {
 
   const column = [
     "S.No",
+    "Image",
     "Fullname",
     "Email",
     "Mobile No.",
@@ -88,6 +89,18 @@ export default function Managers() {
             managers.map((manager, i) => (
               <tr key={manager.id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
+                <td>
+                  <img
+                    className="td-img"
+                    src={manager.avatar}
+                    alt=""
+                    style={{
+                      width: "50px",
+                      height: "50px",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </td>
                 <td>{manager.fullname}</td>
                 <td>{manager.email}</td>
                 <td>{manager.mobile_no}</td>
