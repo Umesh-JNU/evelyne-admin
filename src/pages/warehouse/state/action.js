@@ -14,7 +14,7 @@ export const create = async (dispatch, token, input) => {
 
     setTimeout(() => {
       dispatch({ type: 'ADD_SUCCESS' });
-    }, 3000);
+    }, 1500);
   } catch (err) {
     dispatch({ type: "ADD_FAIL", payload: getError(err) });
   }
@@ -64,9 +64,9 @@ export const update = async (dispatch, token, id, input) => {
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 3000);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
 
@@ -82,10 +82,7 @@ export const getDetails = async (dispatch, token, id) => {
 
     dispatch({ type: "FETCH_DETAILS_SUCCESS", payload: data });
   } catch (err) {
-    dispatch({
-      type: "FETCH_DETAILS_FAIL",
-      payload: getError(err),
-    });
+    dispatch({ type: "FETCH_DETAILS_FAIL", payload: getError(err) });
   }
 };
 
@@ -99,8 +96,8 @@ export const updateWarehouse = async (dispatch, token, inputInfo) => {
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 1500);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };

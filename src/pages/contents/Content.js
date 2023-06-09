@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
 import { clearErrors } from "../../states/actions";
 import { useNavigate } from "react-router-dom";
-import { getDateTime } from "../../utils/function";
 
 import { ToastContainer, toast } from "react-toastify";
 import {

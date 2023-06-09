@@ -13,7 +13,7 @@ export const create = async (dispatch, token, input) => {
 
     setTimeout(() => {
       dispatch({ type: 'ADD_SUCCESS' });
-    }, 3000);
+    }, 1500);
   } catch (err) {
     dispatch({ type: "ADD_FAIL", payload: getError(err) });
   }
@@ -56,15 +56,15 @@ export const update = async (dispatch, token, id, userInfo) => {
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 
-    await axiosInstance.put(`/api/admin/user/${id}`, userInfo, {
+    await axiosInstance.put(`/api/admin/user/${id}`, { ...userInfo, role: 'manager' }, {
       headers: { Authorization: token },
     });
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 3000);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
 
@@ -80,10 +80,7 @@ export const getDetails = async (dispatch, token, id) => {
 
     dispatch({ type: "FETCH_DETAILS_SUCCESS", payload: data });
   } catch (err) {
-    dispatch({
-      type: "FETCH_DETAILS_FAIL",
-      payload: getError(err),
-    });
+    dispatch({ type: "FETCH_DETAILS_FAIL", payload: getError(err) });
   }
 };
 
@@ -97,10 +94,7 @@ export const getWarehouses = async (dispatch) => {
 
     dispatch({ type: "FETCH_WAREHOUSE_SUCCESS", payload: data });
   } catch (err) {
-    dispatch({
-      type: "FETCH_WAREHOUSE_FAIL",
-      payload: getError(err),
-    });
+    dispatch({ type: "FETCH_WAREHOUSE_FAIL", payload: getError(err) });
   }
 };
 
@@ -114,8 +108,24 @@ export const updateWarehouse = async (dispatch, token, { managerId, warehouse })
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 1500);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
+
+export const removeWarehouse = async (dispatch, token, managerId) => {
+  try {
+    dispatch({ type: "UPDATE_REQUEST" });
+
+    await axiosInstance.put(`/api/admin/warehouse/assign`, { managerId }, {
+      headers: { Authorization: token },
+    });
+
+    setTimeout(() => {
+      dispatch({ type: "UPDATE_SUCCESS" });
+    }, 2000);
+  } catch (err) {
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
+  }
+}

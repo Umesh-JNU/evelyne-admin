@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import Skeleton from 'react-loading-skeleton';
 import { Card, Col, Row } from 'react-bootstrap'
 import { FaEdit, FaCheck } from 'react-icons/fa';
 import { ImCross } from "react-icons/im";
-import Skeleton from 'react-loading-skeleton';
+import { toast } from 'react-toastify';
+import { clearErrors } from '../../states/actions';
 import { getDateTime } from '../../utils/function';
+import { toastOptions } from '../../utils/error';
+import MotionDiv from './MotionDiv';
+import MessageBox from './MessageBox';
 
 /**
  * Renders a card component to display details with optional loading state and edit functionality.
@@ -45,81 +50,106 @@ const isDate = (date) => {
 
 const dynamicComp = (val) => {
   const dataType = typeof val;
-  console.log({ dataType })
+  // console.log({ dataType })
   switch (dataType) {
     case "number": return val;
     case "boolean": return boolComp(val);
-    default: return val ? (isDate(val) ? getDateTime(val) : val) : "---";
+    default:
+      // console.log({ val });
+      const res = val ? (isDate(val) ? getDateTime(val) : val) : "---";
+      // console.log({ res });
+      return res;
   }
 };
 
 export default function ViewCard(props) {
-  console.log({ props })
+  // console.log({ props })
   const {
-    loading,
     setModalShow,
     data,
     keyProps,
     title,
     isImage,
     image_url,
+    reducerProps,
   } = props;
+
+  const { loading, error, dispatch } = reducerProps;
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, toastOptions);
+      clearErrors(dispatch)
+    }
+  }, [error]);
 
   const fields = Object.entries(keyProps);
   return (
-    <Card>
-      <Card.Header>
-        {title
-          ? <Card.Title>{title}</Card.Title>
-          : <Skeleton count={1} height={35} width={200} baseColor='#afafaf' />
-        }
-        <div className="card-tools">
-          <FaEdit
-            style={{ color: "blue" }}
-            onClick={() => setModalShow(true)}
-          />
-        </div>
-      </Card.Header>
-      <Card.Body>
-        {isImage
-          ?
-          <Row>
-            <Col md={4}>
-              <img
-                className="img-fluid"
-                src={image_url}
-                alt=""
-                width={"200px"}
-                height={"200px"}
+    <MotionDiv initial={{ x: "100%" }}>
+      {error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <Card>
+          <Card.Header>
+            {title
+              ? <Card.Title>{title}</Card.Title>
+              : <Skeleton count={1} height={35} width={200} baseColor='#afafaf' />
+            }
+            <div className="card-tools">
+              <FaEdit
+                style={{ color: "blue" }}
+                onClick={() => setModalShow(true)}
               />
-            </Col>
-            <Col>
+            </div>
+          </Card.Header>
+          <Card.Body>
+            {isImage
+              ?
               <Row>
-                {fields && fields.map(([k, attr]) => (
-                  <Col key={k} md={4}>
-                    <p className="mb-0">
-                      <strong>{k}</strong>
-                    </p>
-                    <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
-                  </Col>
-                ))}
+                <Col md={4}>
+                  <img
+                    className="img-fluid"
+                    src={image_url}
+                    alt=""
+                    width={"200px"}
+                    height={"200px"}
+                  />
+                </Col>
+                <Col>
+                  <Row>
+                    {fields && fields.map(([k, attr]) => {
+                      // console.log({ k, attr })
+                      return (
+                        <Col key={k} md={4}>
+                          <p className="mb-0">
+                            <strong>{k}</strong>
+                          </p>
+                          <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
+                        </Col>
+                      )
+                    })}
+                  </Row>
+                </Col>
               </Row>
-            </Col>
-          </Row>
-          :
-          <Row>
-            {fields && fields.map(([k, attr]) => (
-              <Col key={k} md={4}>
-                <p className="mb-0">
-                  <strong>{k}</strong>
-                </p>
-                <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
-              </Col>
-            ))}
-          </Row>
-        }
-        {props.children}
-      </Card.Body>
-    </Card>
+              :
+              <Row>
+                {fields && fields.map(([k, attr]) => {
+                  // console.log({ k, attr })
+                  return (
+                    <Col key={k} md={4}>
+                      <p className="mb-0">
+                        <strong>{k}</strong>
+                      </p>
+                      <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
+                    </Col>
+                  )
+                })}
+              </Row>
+            }
+            {props.children}
+          </Card.Body>
+        </Card>
+      )}
+    </MotionDiv>
   )
 }

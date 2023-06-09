@@ -4,7 +4,7 @@ import { Store } from "../../states/store";
 import { ToastContainer } from "react-toastify";
 import reducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, MotionDiv, CustomForm } from "../../components";
+import { useTitle, AddForm } from "../../components";
 
 export default function AddController() {
   const { state } = useContext(Store);
@@ -65,19 +65,18 @@ export default function AddController() {
 
   useTitle("Create Content");
   return (
-    <MotionDiv>
-      <CustomForm
-        title="Add Content"
-        data={info}
-        setData={setInfo}
-        inputFieldProps={contentAttr}
-        submitHandler={submitHandler}
-        target="/admin/contents"
-        successMessage="Content Created Successfully!"
-        reducerProps={{ loading, error, success, dispatch }}
-      />
+    <AddForm
+      title="Add Content"
+      data={info}
+      setData={setInfo}
+      inputFieldProps={contentAttr}
+      submitHandler={submitHandler}
+      target="/admin/contents"
+      successMessage="Content Created Successfully!"
+      reducerProps={{ loading, error, success, dispatch }}
+    >
       <ToastContainer />
-    </MotionDiv>
+    </AddForm>
   );
 }
 

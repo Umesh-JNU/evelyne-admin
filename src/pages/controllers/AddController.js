@@ -4,7 +4,7 @@ import { Store } from "../../states/store";
 import { ToastContainer } from "react-toastify";
 import reducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, MotionDiv, CustomForm } from "../../components";
+import { useTitle, AddForm } from "../../components";
 
 export default function AddController() {
   const { state } = useContext(Store);
@@ -96,18 +96,17 @@ export default function AddController() {
 
   useTitle("Create Controller");
   return (
-    <MotionDiv>
-      <CustomForm
-        title="Add Controller"
-        data={info}
-        setData={setInfo}
-        inputFieldProps={controllerAttr}
-        submitHandler={submitHandler}
-        target="/admin/controllers"
-        successMessage="Controller Created Successfully!"
-        reducerProps={{ loading: loadingAdd, error, success, dispatch }}
-      />
+    <AddForm
+      title="Add Controller"
+      data={info}
+      setData={setInfo}
+      inputFieldProps={controllerAttr}
+      submitHandler={submitHandler}
+      target="/admin/controllers"
+      successMessage="Controller Created Successfully!"
+      reducerProps={{ loading: loadingAdd, error, success, dispatch }}
+    >
       <ToastContainer />
-    </MotionDiv>
+    </AddForm>
   );
 }

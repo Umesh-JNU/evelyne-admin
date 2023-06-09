@@ -36,7 +36,7 @@ export const del = async (dispatch, token, id) => {
 
 export const update = async (dispatch, token, id, userInfo) => {
   try {
-    console.log({userInfo});
+    console.log({ userInfo });
     dispatch({ type: "UPDATE_REQUEST" });
 
     await axiosInstance.put(`/api/admin/user/${id}`, userInfo, {
@@ -45,9 +45,9 @@ export const update = async (dispatch, token, id, userInfo) => {
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 3000);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
 
@@ -63,9 +63,6 @@ export const getDetails = async (dispatch, token, id) => {
 
     dispatch({ type: "FETCH_DETAILS_SUCCESS", payload: data });
   } catch (err) {
-    dispatch({
-      type: "FETCH_DETAILS_FAIL",
-      payload: getError(err),
-    });
+    dispatch({ type: "FETCH_DETAILS_FAIL", payload: getError(err) });
   }
 };

@@ -56,15 +56,15 @@ export const update = async (dispatch, token, id, userInfo) => {
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 
-    await axiosInstance.put(`/api/admin/user/${id}`, userInfo, {
+    await axiosInstance.put(`/api/admin/user/${id}`, {...userInfo, role: 'controller'}, {
       headers: { Authorization: token },
     });
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 3000);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
 
@@ -80,10 +80,7 @@ export const getDetails = async (dispatch, token, id) => {
 
     dispatch({ type: "FETCH_DETAILS_SUCCESS", payload: data });
   } catch (err) {
-    dispatch({
-      type: "FETCH_DETAILS_FAIL",
-      payload: getError(err),
-    });
+    dispatch({ type: "FETCH_DETAILS_FAIL", payload: getError(err) });
   }
 };
 
@@ -97,10 +94,7 @@ export const getWarehouses = async (dispatch) => {
 
     dispatch({ type: "FETCH_WAREHOUSE_SUCCESS", payload: data });
   } catch (err) {
-    dispatch({
-      type: "FETCH_WAREHOUSE_FAIL",
-      payload: getError(err),
-    });
+    dispatch({ type: "FETCH_WAREHOUSE_FAIL", payload: getError(err) });
   }
 };
 
@@ -114,8 +108,8 @@ export const updateWarehouse = async (dispatch, token, { controllerId, warehouse
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 1500);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };

@@ -2,15 +2,15 @@ import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
 
 import { ToastContainer } from "react-toastify";
-import warehouseReducer from "./state/reducer";
+import reducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, MotionDiv, CustomForm } from "../../components";
+import { useTitle, AddForm } from "../../components";
 
 export default function AddWarehouse() {
   const { state } = useContext(Store);
   const { token } = state;
 
-  const [{ loading, error, success }, dispatch] = useReducer(warehouseReducer, {
+  const [{ loading, error, success }, dispatch] = useReducer(reducer, {
     loading: false,
     error: "",
   });
@@ -57,18 +57,17 @@ export default function AddWarehouse() {
 
   useTitle("Add Warehouse");
   return (
-    <MotionDiv>
-      <CustomForm
-        title="Add Warehouse"
-        data={info}
-        setData={setInfo}
-        inputFieldProps={attr}
-        submitHandler={submitHandler}
-        target={-1}
-        successMessage="Warehouse Created Successfully!"
-        reducerProps={{ loading, error, success, dispatch }}
-      />
+    <AddForm
+      title="Add Warehouse"
+      data={info}
+      setData={setInfo}
+      inputFieldProps={attr}
+      submitHandler={submitHandler}
+      target={-1}
+      successMessage="Warehouse Created Successfully!"
+      reducerProps={{ loading, error, success, dispatch }}
+    >
       <ToastContainer />
-    </MotionDiv >
+    </AddForm >
   );
 }

@@ -60,7 +60,7 @@ export const update = async (dispatch, token, id, userInfo) => {
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 3000);
+    }, 2000);
   } catch (err) {
     dispatch({ type: "UPDATE_FAIL" });
   }

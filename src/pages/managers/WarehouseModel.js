@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import managerReducer from "./state/reducer";
-import { getDetails, updateWarehouse } from "./state/action";
+import { getDetails, updateWarehouse, removeWarehouse } from "./state/action";
 
 import { ToastContainer, toast } from "react-toastify";
 import {
@@ -21,10 +21,10 @@ import { clearErrors } from "../../states/actions";
 
 export default function EditUserModel(props) {
   console.log(props.show)
-  const navigate = useNavigate();
   const { state } = useContext(Store);
   const { token } = state;
   const { id } = useParams();  // manager/:id
+  const { houseId } = props;
 
   const [{ loading, error, loadingUpdate, manager, success }, dispatch] = useReducer(managerReducer, {
     loading: true,
@@ -52,30 +52,35 @@ export default function EditUserModel(props) {
   };
 
   useEffect(() => {
-    (async () => {
-      await getDetails(dispatch, token, id);
-    })();
-  }, [id, props.show]);
-
-  useEffect(() => {
     if (success) {
       toast.success("Manager's Warehouse Updated Succesfully.  Redirecting...", toastOptions);
       setTimeout(() => {
-        navigate(-1);
+        props.onHide();
+        window.location.reload();
       }, 2000);
     }
 
+    (async () => {
+      await getDetails(dispatch, token, id);
+    })();
+  }, [success, id, props.show]);
+
+  useEffect(() => {
     if (error) {
       toast.error(error, toastOptions);
       clearErrors(dispatch);
     }
-  }, [success, error]);
+  }, [error]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    resetForm();
     await updateWarehouse(dispatch, token, { managerId: manager.id, warehouse: warehouses[0].id });
+    resetForm();
+  };
+
+  const removeHouse = async () => {
+    await removeWarehouse(dispatch, token, {managerId: manager.id});
   };
 
   return (
@@ -91,65 +96,35 @@ export default function EditUserModel(props) {
       <Form onSubmit={submitHandler}>
         <Modal.Body>
           <Container className="small-container">
-            {/* <Row> */}
-            {/* <Col md={8}> */}
-            <AutocompleteSearch value={house.name} onSelect={addWarehouseHandler} searchType="warehouse" />
-            {/* </Col> */}
-            {/* <Col md={4}>
-                <Button onClick={addWarehouseHandler}>
-                  Add Warehouse
-                </Button>
-              </Col> */}
-            {/* </Row> */}
-            <Row className="mt-3">
-              {warehouses && warehouses.length > 0 && (
-                <Table responsive striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Warehouse Id</th>
-                      <th>Name</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {warehouses.map(({ id, name }, i) => (
-                      <tr key={id}       >
-                        <td>{id}</td>
-                        <td>{name}</td>
-                        <td>
-                          <Button
-                            onClick={(e) => {
-                              e.preventDefault();
-                              const index = warehouses.findIndex(
-                                (i) =>
-                                  i.id === id &&
-                                  i.name === name
-                              );
-                              console.log({ index });
-                              if (index > -1) {
-                                // only splice array when item is found
 
-                                setWarehouses([
-                                  // part of the array before the given item
-                                  ...warehouses.slice(0, index),
+            <AutocompleteSearch onSelect={addWarehouseHandler} searchType="warehouse" />
 
-                                  // part of the array after the given item
-                                  ...warehouses.slice(index + 1),
-                                ]);
-                              }
-                            }}
-                            type="danger"
-                            className="btn btn-danger btn-block"
-                          >
-                            Delete
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              )}
-            </Row>
+            {house &&
+              <Table responsive striped bordered hover className="mt-3">
+                <thead>
+                  <tr>
+                    <th>Warehouse Id</th>
+                    <th>Name</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{house.id}</td>
+                    <td>{house.fullname}</td>
+                    <td>
+                      <Button
+                        type="danger"
+                        className="btn btn-danger btn-block"
+                        onClick={removeHouse}
+                      >
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                </tbody>
+              </Table>
+            }
             <ToastContainer />
           </Container>
         </Modal.Body>

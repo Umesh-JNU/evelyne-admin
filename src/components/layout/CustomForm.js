@@ -10,11 +10,12 @@
 */
 
 import React, { useEffect } from 'react'
-import { Card, Col, Form, Row, Spinner, Button } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { Card, Col, Form, Row, Spinner, Button, Modal, Container } from 'react-bootstrap';
+import { ToastContainer, toast } from 'react-toastify';
 import { toastOptions } from '../../utils/error';
 import { clearErrors } from '../../states/actions';
 import { useNavigate } from 'react-router-dom';
+import MotionDiv from './MotionDiv';
 
 /**
  * Text input component for the form.
@@ -83,9 +84,10 @@ const CheckInput = (props) => {
  */
 const SelectInput = (props) => {
   console.log("select", { props })
+  const grpStyle = props.grpStyle || "mb-3";
   return (
-    <Form.Group className="mb-3">
-      <Form.Label className="mr-3">{props.label}</Form.Label>
+    <Form.Group className={grpStyle}>
+      {props.label && <Form.Label className="mr-3">{props.label}</Form.Label>}
       <Form.Select
         aria-label="Select Option"
         aria-controls="option"
@@ -148,7 +150,7 @@ const SelectInput = (props) => {
     },
   ];
 
-  <CustomForm
+  <AddForm
     title="Add Order"
     data={info}
     setData={setInfo}
@@ -159,9 +161,111 @@ const SelectInput = (props) => {
     reducerProps={{ loading: loadingAdd, error, success, dispatch }}
   >
     {children}
-  </CustomForm>
+  </AddForm>
  */
-const CustomForm = (props) => {
+const EditForm = (props) => {
+  console.log("edit", { props })
+  const navigate = useNavigate();
+
+  const {
+    title,
+    data,
+    setData,
+    inputFieldProps,
+    submitHandler,
+    target,
+    successMessage,
+    reducerProps,
+    children,
+  } = props;
+
+  const { loadingUpdate, success, error, dispatch } = reducerProps;
+
+  useEffect(() => {
+    if (success) {
+      toast.success(successMessage, toastOptions);
+      setTimeout(() => { navigate(target); }, 2000);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error, toastOptions);
+      clearErrors(dispatch);
+    }
+  }, [error]);
+
+  return (
+    <Modal
+      show={props.show}
+      onHide={props.onHide}
+      size="lg"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter">{title}</Modal.Title>
+      </Modal.Header>
+      <Form onSubmit={submitHandler}>
+        <Modal.Body>
+          <Container className="small-container">
+            <Row>
+              {inputFieldProps.map(({ type, col = 6, props }) => {
+                console.log("edit", { type, col, props, key: props.name });
+                switch (type) {
+                  case "check":
+                    return (
+                      <Col key={props.name} md={col}>
+                        <CheckInput
+                          {...props}
+                          onChange={(e) => setData({ ...data, [props.name]: e.target.checked })}
+                          checked={data[props.name]}
+                        />
+                      </Col>
+                    )
+                  case "select":
+                    return (
+                      <Col key={props.name} md={col}>
+                        <SelectInput
+                          {...props}
+                          onChange={(e) => setData({ ...data, [props.name]: e.target.value })}
+                          value={data[props.name]}
+                        />
+                      </Col>
+                    )
+                  default:
+                    return (
+                      <Col key={props.name} md={col}>
+                        <TextInput
+                          {...props}
+                          onChange={(e) => setData({ ...data, [e.target.name]: e.target.value })}
+                          value={data[props.name]}
+                        />
+                      </Col>
+                    )
+                }
+              })}
+            </Row>
+            {children}
+          </Container>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={props.onHide}>Close</Button>
+          <Button variant="success" type="submit" disabled={loadingUpdate || success ? true : false}>
+            {loadingUpdate ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              "Submit"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Form>
+      <ToastContainer />
+    </Modal>
+  )
+}
+
+const AddForm = (props) => {
   const navigate = useNavigate();
 
   const {
@@ -193,7 +297,7 @@ const CustomForm = (props) => {
   }, [error]);
 
   return (
-    <>
+    <MotionDiv>
       <Row
         className="mt-2 mb-3"
         style={{ borderBottom: "1px solid rgba(0,0,0,0.2)" }}
@@ -260,8 +364,8 @@ const CustomForm = (props) => {
           </Card>
         </Col>
       </Row>
-    </>
+    </MotionDiv>
   )
 }
 
-export { CustomForm, TextInput, CheckInput, SelectInput };
+export { AddForm, EditForm, TextInput, CheckInput, SelectInput };

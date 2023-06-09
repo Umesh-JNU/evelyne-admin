@@ -2,15 +2,15 @@ import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
 
 import { ToastContainer } from "react-toastify";
-import managerReducer from "./state/reducer";
+import reducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, MotionDiv, CustomForm } from "../../components";
+import { useTitle, AddForm } from "../../components";
 
 export default function AddController() {
   const { state } = useContext(Store);
   const { token } = state;
 
-  const [{ loading, loadingAdd, error, success }, dispatch] = useReducer(managerReducer, {
+  const [{ loading, loadingAdd, error, success }, dispatch] = useReducer(reducer, {
     loading: false,
     loadingAdd: false,
     error: "",
@@ -96,18 +96,17 @@ export default function AddController() {
 
   useTitle("Create Manager");
   return (
-    <MotionDiv>
-      <CustomForm
-        title="Add Manager"
-        data={info}
-        setData={setInfo}
-        inputFieldProps={managerAttr}
-        submitHandler={submitHandler}
-        target="/admin/managers"
-        successMessage="Manager Created Successfully!"
-        reducerProps={{ loading: loadingAdd, error, success, dispatch }}
-      />
+    <AddForm
+      title="Add Manager"
+      data={info}
+      setData={setInfo}
+      inputFieldProps={managerAttr}
+      submitHandler={submitHandler}
+      target="/admin/managers"
+      successMessage="Manager Created Successfully!"
+      reducerProps={{ loading: loadingAdd, error, success, dispatch }}
+    >
       <ToastContainer />
-    </MotionDiv>
+    </AddForm>
   );
 }

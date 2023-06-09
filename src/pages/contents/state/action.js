@@ -13,7 +13,7 @@ export const create = async (dispatch, token, input) => {
     console.log("Content add data", data);
     setTimeout(() => {
       dispatch({ type: 'ADD_SUCCESS' });
-    }, 3000);
+    }, 1500);
   } catch (err) {
     dispatch({ type: "ADD_FAIL", payload: getError(err) });
   }
@@ -62,9 +62,9 @@ export const update = async (dispatch, token, id, contentInfo) => {
 
     setTimeout(() => {
       dispatch({ type: "UPDATE_SUCCESS" });
-    }, 3000);
+    }, 2000);
   } catch (err) {
-    dispatch({ type: "UPDATE_FAIL" });
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
 
