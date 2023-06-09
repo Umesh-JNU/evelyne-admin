@@ -101,3 +101,20 @@ export const updateWarehouse = async (dispatch, token, inputInfo) => {
     dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
+
+export const removeHandler = async (dispatch, token, inputInfo) => {
+  try {
+    dispatch({ type: "UPDATE_REQUEST" });
+
+    const { data } = await axiosInstance.put(`/api/admin/warehouse/remove`, inputInfo, {
+      headers: { Authorization: token },
+    });
+
+    console.log({ data });
+    setTimeout(() => {
+      dispatch({ type: "UPDATE_SUCCESS" });
+    }, 2000);
+  } catch (err) {
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
+  }
+};

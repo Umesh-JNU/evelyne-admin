@@ -6,7 +6,7 @@ export default function warehouseReducer(state, action) {
     case "FETCH_ADDINFO_REQUEST":
       return { ...state, loading: true };
     case "UPDATE_REQUEST":
-      return { ...state, loadingUpdate: true };
+      return { ...state, loadingUpdate: true, success: false };
 
     case "FETCH_SUCCESS":
       return {

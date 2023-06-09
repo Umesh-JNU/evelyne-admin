@@ -24,7 +24,7 @@ export default function AddMangerModel(props) {
   const { token } = state;
   const { id } = useParams();  // warehouse/:id
 
-  const [{ loading, error, loadingUpdate, success }, dispatch] = useReducer(controllerReducer, {
+  const [{ loading, error, loadingUpdate, success, message }, dispatch] = useReducer(controllerReducer, {
     loadingUpdate: false,
     error: "",
   });
@@ -38,7 +38,7 @@ export default function AddMangerModel(props) {
     if (success) {
       toast.success("Warehouse's Manager Updated Succesfully.  Redirecting...", toastOptions);
       setTimeout(() => {
-        navigate(-1);
+        window.location.reload();
       }, 2000);
     }
 
