@@ -113,3 +113,19 @@ export const updateWarehouse = async (dispatch, token, { controllerId, warehouse
     dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
   }
 };
+
+export const removeWarehouse = async (dispatch, token, info) => {
+  try {
+    dispatch({ type: "UPDATE_REQUEST" });
+
+    await axiosInstance.put(`/api/admin/warehouse/remove`, info, {
+      headers: { Authorization: token },
+    });
+
+    setTimeout(() => {
+      dispatch({ type: "UPDATE_SUCCESS" });
+    }, 2000);
+  } catch (err) {
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
+  }
+}

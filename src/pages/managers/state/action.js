@@ -84,12 +84,12 @@ export const getDetails = async (dispatch, token, id) => {
   }
 };
 
-export const getWarehouses = async (dispatch) => {
+export const getWarehouse = async (dispatch, token, id) => {
   // console.log(token, id);
   try {
     dispatch({ type: "FETCH_WAREHOUSE_REQUEST" });
 
-    const { data } = await axiosInstance.get(`/api/warehouse`);
+    const { data } = await axiosInstance.get(`/api/warehouse/${id}`);
     console.log("warehouses manager:", data);
 
     dispatch({ type: "FETCH_WAREHOUSE_SUCCESS", payload: data });
@@ -118,7 +118,7 @@ export const removeWarehouse = async (dispatch, token, managerId) => {
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 
-    await axiosInstance.put(`/api/admin/warehouse/assign`, { managerId }, {
+    await axiosInstance.put(`/api/admin/warehouse/remove`, { managerId }, {
       headers: { Authorization: token },
     });
 

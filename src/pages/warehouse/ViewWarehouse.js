@@ -10,8 +10,9 @@ import EditWarehouseModel from "./EditWarehouse.js";
 import AddMangerModel from "./AddManagerModel";
 import AddControllerModel from "./AddControllerModel";
 import { Button, Col, Row } from "react-bootstrap";
-import { FaTrashAlt } from "react-icons/fa";
+import Skeleton from "react-loading-skeleton";
 import { toastOptions } from "../../utils/error";
+import { FaTrashAlt } from "react-icons/fa";
 
 const ViewWarehouse = () => {
   const { state } = useContext(Store);
@@ -21,7 +22,7 @@ const ViewWarehouse = () => {
   const [modalShow, setModalShow] = useState(false);
   const [showManager, setShowManager] = useState(false);
   const [showController, setShowController] = useState(false);
-  const [{ loading, error, loadingUpdate, warehouse, success, message }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, loadingUpdate, warehouse, success }, dispatch] = useReducer(reducer, {
     loading: true,
     loadingUpdate: false,
     error: "",
@@ -35,23 +36,27 @@ const ViewWarehouse = () => {
 
   useEffect(() => {
     if (success) {
+      (async () => {
+        await getDetails(dispatch, token, id);
+      })();
+
       toast.success("Controller/Manager Removed Successfully.", toastOptions);
     }
   }, [success]);
 
   const removeManager = async (managerId) => {
     await removeHandler(dispatch, token, { managerId, warehouseId: id });
-    warehouse.manager = null;
+    // warehouse.manager = null;
   }
 
   const removeController = async (controllerId) => {
     await removeHandler(dispatch, token, { controllerId, warehouseId: id });
-    const idx = warehouse.controller.findIndex(({ id }) => {
-      // console.log({ id, controllerId });
-      return id === controllerId
-    });
-    // console.log({ idx });
-    if (idx >= 0) warehouse.controller.splice(idx, 1);
+    // const idx = warehouse.controller.findIndex(({ id }) => {
+    //   // console.log({ id, controllerId });
+    //   return id === controllerId
+    // });
+    // // console.log({ idx });
+    // if (idx >= 0) warehouse.controller.splice(idx, 1);
     // console.log(warehouse.controller);
   }
 
@@ -79,7 +84,7 @@ const ViewWarehouse = () => {
       </Row>
 
       <div className="mt-3">
-        {warehouse?.manager ?
+        {loading ? <Skeleton height={35} /> : warehouse.manager ?
           <Row>
             <Col md={2}><b>Manager - </b></Col>
             <Col md={2}>{warehouse.manager.fullname}</Col>
@@ -91,7 +96,7 @@ const ViewWarehouse = () => {
               </Button>
             </Col>
           </Row>
-          : "No Manager Assigned"
+          : <p className="p-bold">No Manager Assigned</p>
         }
       </div>
 
@@ -103,7 +108,7 @@ const ViewWarehouse = () => {
       </Row>
 
       <div className="mt-3">
-        {warehouse?.controller.length > 0
+        {loading ? <Skeleton count={2} height={35} /> : warehouse.controller.length > 0
           ? warehouse.controller.map(({ id, fullname }, i) =>
             <Row className="mt-2" key={id}>
               <Col md={2} className="text-center"><b>{i + 1}. </b></Col>
@@ -117,7 +122,7 @@ const ViewWarehouse = () => {
               </Col>
             </Row>
           )
-          : "No Controller Assigned"
+          : <p className="p-bold">No Controller Assigned</p>
         }
       </div>
 
@@ -125,14 +130,17 @@ const ViewWarehouse = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-      <AddMangerModel
+      {showManager && <AddMangerModel
         show={showManager}
         onHide={() => setShowManager(false)}
-      />
+        manager={warehouse?.manager}
+        reload={async () => { await getDetails(dispatch, token, id); }}
+      />}
       {showController && <AddControllerModel
         show={showController}
         onHide={() => setShowController(false)}
         controllerList={warehouse.controller}
+        reload={async () => { await getDetails(dispatch, token, id); }}
       />}
       {!showController && !showManager && !modalShow && < ToastContainer />}
     </ViewCard>

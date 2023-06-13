@@ -71,24 +71,30 @@ export default function ViewCard(props) {
     title,
     isImage,
     image_url,
+    successMsg,
     reducerProps,
   } = props;
 
-  const { loading, error, dispatch } = reducerProps;
+  const { loading, error, dispatch, success } = reducerProps;
 
+  console.log({error});
   useEffect(() => {
     if (error) {
       toast.error(error, toastOptions);
       clearErrors(dispatch)
     }
-  }, [error]);
+
+    if (success) {
+      toast.success(successMsg, toastOptions);
+    }
+  }, [error, success]);
 
   const fields = Object.entries(keyProps);
   return (
     <MotionDiv initial={{ x: "100%" }}>
-      {error ? (
+      {/* {error ? (
         <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
+      ) : ( */}
         <Card>
           <Card.Header>
             {title
@@ -107,13 +113,14 @@ export default function ViewCard(props) {
               ?
               <Row>
                 <Col md={4}>
-                  <img
-                    className="img-fluid"
-                    src={image_url}
-                    alt=""
-                    width={"200px"}
-                    height={"200px"}
-                  />
+                  {loading ? <Skeleton height={200} /> :
+                    <img
+                      className="img-fluid"
+                      src={image_url}
+                      alt=""
+                      width={"200px"}
+                      height={"200px"}
+                    />}
                 </Col>
                 <Col>
                   <Row>
@@ -149,7 +156,7 @@ export default function ViewCard(props) {
             {props.children}
           </Card.Body>
         </Card>
-      )}
+      {/* )} */}
     </MotionDiv>
   )
 }

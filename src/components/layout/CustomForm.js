@@ -16,6 +16,7 @@ import { toastOptions } from '../../utils/error';
 import { clearErrors } from '../../states/actions';
 import { useNavigate } from 'react-router-dom';
 import MotionDiv from './MotionDiv';
+import SubmitButton from './SubmitButton';
 
 /**
  * Text input component for the form.
@@ -184,7 +185,10 @@ const EditForm = (props) => {
   useEffect(() => {
     if (success) {
       toast.success(successMessage, toastOptions);
-      setTimeout(() => { navigate(target); }, 2000);
+      setTimeout(() => {
+        if (target) navigate(target);
+        else { props.onHide(); props.reload(); };
+      }, 3000);
     }
   }, [success]);
 
@@ -251,13 +255,7 @@ const EditForm = (props) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.onHide}>Close</Button>
-          <Button variant="success" type="submit" disabled={loadingUpdate || success ? true : false}>
-            {loadingUpdate ? (
-              <Spinner animation="border" size="sm" />
-            ) : (
-              "Submit"
-            )}
-          </Button>
+          <SubmitButton variant="success" loading={loadingUpdate} disabled={loadingUpdate || success}>Submit</SubmitButton>
         </Modal.Footer>
       </Form>
       <ToastContainer />
@@ -352,13 +350,7 @@ const AddForm = (props) => {
                 {children}
               </Card.Body>
               <Card.Footer>
-                <Button type="submit" disabled={loading || success ? true : false}>
-                  {loading ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Submit"
-                  )}
-                </Button>
+                <SubmitButton loading={loading} disabled={loading || success}>Submit</SubmitButton>
               </Card.Footer>
             </Form>
           </Card>

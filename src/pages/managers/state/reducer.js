@@ -7,7 +7,7 @@ export default function managerReducer(state, action) {
     case "ADD_REQUEST":
       return { ...state, loadingAdd: true };
     case "UPDATE_REQUEST":
-      return { ...state, loadingUpdate: true };
+      return { ...state, loadingUpdate: true, success: false };
 
     case "FETCH_SUCCESS":
       return {

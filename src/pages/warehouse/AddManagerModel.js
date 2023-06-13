@@ -1,117 +1,117 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import controllerReducer from "./state/reducer";
 import { updateWarehouse } from "./state/action";
 
 import { ToastContainer, toast } from "react-toastify";
-import {
-  Button,
-  Container,
-  Form,
-  Modal,
-  Spinner,
-  Table,
-} from "react-bootstrap";
+import { Button, Container, Modal, Table } from "react-bootstrap";
 import { toastOptions } from "../../utils/error";
-import { AutocompleteSearch } from "../../components";
-import { clearErrors } from "../../states/actions";
+import { AutocompleteSearch, EditForm } from "../../components";
 
+const ManagerTable = ({ manager }) => {
+  return (
+    <Table responsive striped bordered hover className="mt-3">
+      <thead>
+        <tr>
+          <th>Manager Id</th>
+          {/* <th>Image</th> */}
+          <th>Name</th>
+          {/* <th>Action</th> */}
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td className="text-center">{manager.id}</td>
+          {/* <td><img
+            className="td-img"
+            src={manager.avatar}
+            alt=""
+            style={{
+              width: "50px",
+              height: "50px",
+              borderRadius: "50%",
+            }}
+          /></td> */}
+          <td>{manager.fullname}</td>
+        </tr>
+      </tbody>
+    </Table>
+  )
+}
 export default function AddMangerModel(props) {
-  console.log(props.show)
-  const navigate = useNavigate();
+  console.log("AssignManagerModel", { props })
   const { state } = useContext(Store);
   const { token } = state;
   const { id } = useParams();  // warehouse/:id
+  const { manager: manager_ } = props;
 
-  const [{ loading, error, loadingUpdate, success, message }, dispatch] = useReducer(controllerReducer, {
+  const [{ loading, error, loadingUpdate, success }, dispatch] = useReducer(controllerReducer, {
+    loading: true,
     loadingUpdate: false,
     error: "",
   });
 
-  const [manager, setManager] = useState("");
+  const [manager, setManager] = useState(manager_);
   const resetForm = () => {
     setManager("");
   };
 
-  useEffect(() => {
-    if (success) {
-      toast.success("Warehouse's Manager Updated Succesfully.  Redirecting...", toastOptions);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+  const addManager = (m) => {
+    if (!m) {
+      toast.warning("Manager can't be empty", toastOptions);
+      return;
     }
 
-    if (error) {
-      toast.error(error, toastOptions);
-      clearErrors(dispatch);
-    }
-  }, [success, error]);
+    setManager(m);
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    resetForm();
     await updateWarehouse(dispatch, token, { managerId: manager.id, warehouse: id });
+    resetForm();
   };
 
-  return (
-    <Modal
-      {...props}
+  return (manager_
+    ? <Modal
+      show={props.show}
+      onHide={props.onHide}
       size="lg"
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">Assign/Change Manager</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={submitHandler}>
-        <Modal.Body>
-          <Container className="small-container">
-
-            <AutocompleteSearch onSelect={(manager) => setManager(manager)} searchType="manager" />
-
-            {manager &&
-              <Table responsive striped bordered hover className="mt-3">
-                <thead>
-                  <tr>
-                    <th>Manager Id</th>
-                    <th>Full Name</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{manager.id}</td>
-                    <td>{manager.fullname}</td>
-                    <td>
-                      <Button
-                        onClick={() => setManager("")} type="danger"
-                        className="btn btn-danger btn-block"
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                </tbody>
-              </Table>
-            }
-            <ToastContainer />
-          </Container>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="danger" onClick={() => { props.onHide(); setManager("") }}>
-            Close
-          </Button>
-          <Button variant="success" type="submit" disabled={loadingUpdate || success ? true : false}>
-            {loadingUpdate ? (
-              <Spinner animation="border" size="sm" />
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        </Modal.Footer>
-      </Form>
+      <Modal.Body>
+        <Container className="small-container">
+          <p className="p-bold m-0">Already a manager is assigned. To change manager, first remove it.</p>
+          <ManagerTable manager={manager_} />
+        </Container>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="danger" onClick={() => { props.onHide(); }}>
+          Close
+        </Button>
+      </Modal.Footer>
     </Modal >
+
+    : <EditForm
+      {...props}
+      title="Assign/Change Manager"
+      data={{}}
+      setData={() => { }}
+      inputFieldProps={[]}
+      submitHandler={submitHandler}
+      target={''}
+      successMessage="Warehouse's Manager Updated Succesfully."
+      reducerProps={{ loadingUpdate, error, success, dispatch }}
+    >
+      <AutocompleteSearch onSelect={addManager} searchType="manager" />
+
+      {manager && <ManagerTable manager={manager} />}
+      <ToastContainer />
+    </EditForm>
   );
 }

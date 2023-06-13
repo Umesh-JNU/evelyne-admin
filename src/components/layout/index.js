@@ -11,6 +11,7 @@ import SideNavBar from "./SideNavBar";
 import MotionDiv from "./MotionDiv";
 import ViewCard from "./ViewCard";
 import { AddForm, EditForm, TextInput, CheckInput, SelectInput } from "./CustomForm";
+import SubmitButton from "./SubmitButton";
 
 export {
   useTitle,
@@ -28,4 +29,5 @@ export {
   MotionDiv,
   ViewCard,
   AddForm, EditForm, TextInput, CheckInput, SelectInput,
+  SubmitButton,
 };
