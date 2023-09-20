@@ -9,7 +9,7 @@ import { getDetails } from "./state/action";
 import EditContentModel from "./EditContent";
 
 const keyProps = {
-  "Content Id": "id", "Contact No.": "contact_no", "Email": "email", "About Us": "about_us", "Created At": "createdAt", "Last Update": "updatedAt"
+  "Content Id": "id", "Contact No.": "contact_no", "Email": "email", "About Us": "about_us", "Terms and Conditions": "terms_and_cond", "Privacy Policy": "privacy_policy", "Created At": "createdAt", "Last Update": "updatedAt"
 };
 
 const ViewContent = () => {

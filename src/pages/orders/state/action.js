@@ -2,6 +2,7 @@ import axiosInstance from "../../../utils/axiosUtil";
 import { getError } from "../../../utils/error";
 
 export const create = async (dispatch, token, input) => {
+  console.log({ input })
   try {
     dispatch({ type: 'ADD_REQUEST' });
     const { data } = await axiosInstance.post(
@@ -113,3 +114,34 @@ export const getWarehouses = async (dispatch, token) => {
     dispatch({ type: "FETCH_WAREHOUSE_FAIL", payload: getError(error) });
   }
 }
+
+// export const delItem = async (dispatch, token, orderId, itemId) => {
+//   try {
+//     dispatch({ type: "DELETE_ITEM_REQUEST" });
+//     const { data } = await axiosInstance.delete(
+//       `/api/admin/order/${orderId}/item/${itemId}`,
+//       { headers: { Authorization: token } }
+//     );
+//     console.log("delete item", data);
+
+//     dispatch({ type: "DELETE_ITEM_SUCCESS" });
+//   } catch (error) {
+//     dispatch({ type: "DELETE_ITEM_FAIL", payload: getError(error) });
+//   }
+// }
+
+// export const addItem = async (dispatch, token, orderId, items) => {
+//   try {
+//     dispatch({ type: "ADD_ITEM_REQUEST" });
+//     const { data } = await axiosInstance.get(
+//       `/api/admin/order/${orderId}/items`,
+//       { items },
+//       { headers: { Authorization: token } }
+//     );
+//     console.log("add items", data);
+
+//     dispatch({ type: "ADD_ITEM_SUCCESS" });
+//   } catch (error) {
+//     dispatch({ type: "ADD_ITEM_FAIL", payload: getError(error) });
+//   }
+// }

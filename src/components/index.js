@@ -14,7 +14,7 @@ import {
   SideNavBar,
   MotionDiv,
   ViewCard,
-  AddForm, EditForm, TextInput, CheckInput, SelectInput,
+  AddForm, EditForm, TextInput, CheckInput, SelectInput, RadioInput,
   SubmitButton
 } from "./layout";
 
@@ -39,6 +39,6 @@ export {
   ArrayView,
   AutocompleteSearch,
   ViewCard,
-  AddForm, EditForm, TextInput, CheckInput, SelectInput,
+  AddForm, EditForm, TextInput, CheckInput, SelectInput, RadioInput,
   SubmitButton
 };

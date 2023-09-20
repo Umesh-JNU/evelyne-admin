@@ -27,8 +27,8 @@ export default function AddOrder() {
     DDCOM_no: "",
     quantity_decl: "",
     physical_quant: "",
-    arrival_date: "",
-    last_storage_date: "",
+    arrival_date: null,
+    last_storage_date: null,
     truck_no: "",
     container_no: "",
     transporter: "",
@@ -38,8 +38,7 @@ export default function AddOrder() {
     comment: "",
     name_counter: "",
     counter_valid: false,
-    name_manager: "",
-    manager_valid: false,
+    // manager_valid: false,
     customs: "",
     client_valid: false,
     status: "in-bound",
@@ -123,7 +122,6 @@ export default function AddOrder() {
         label: "Arrival Date",
         name: "arrival_date",
         value: orderData.arrival_date,
-        required: true,
       }
     },
     {
@@ -133,7 +131,6 @@ export default function AddOrder() {
         label: "Last Storage Date",
         name: "last_storage_date",
         value: orderData.last_storage_date,
-        required: true,
       }
     },
     {
@@ -222,25 +219,25 @@ export default function AddOrder() {
     },
     {
       type: "check",
-      col: 4,
+      col: 6,
       props: {
         checklabel: "Counter Validation",
         name: "counter_valid",
         value: orderData.counter_valid,
       }
     },
+    // {
+    //   type: "check",
+    //   col: 4,
+    //   props: {
+    //     checklabel: "Manager Approval",
+    //     name: "manager_valid",
+    //     value: orderData.manager_valid,
+    //   }
+    // },
     {
       type: "check",
-      col: 4,
-      props: {
-        checklabel: "Manager Approval",
-        name: "manager_valid",
-        value: orderData.manager_valid,
-      }
-    },
-    {
-      type: "check",
-      col: 4,
+      col: 6,
       props: {
         checklabel: "Client Validation",
         name: "client_valid",

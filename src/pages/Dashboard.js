@@ -17,15 +17,7 @@ import { Store } from "../states/store";
 import { getError } from "../utils/error";
 import axiosInstance from "../utils/axiosUtil";
 
-const months = new Array(12)
-  .fill().map((_, index) => new Date(0, index).toLocaleString('en', { month: 'long' }));
 
-const years = () => {
-  const currentYear = new Date().getFullYear();
-  const yearList = [];
-  for (let year = 2023; year <= currentYear; year++) yearList.push(year);
-  return yearList;
-}
 
 export default function Dashboard() {
   // const [{ loading, summary, error }, dispatch] = useReducer(reducer, {
@@ -36,10 +28,6 @@ export default function Dashboard() {
   const { token } = state;
   const [time, setTime] = useState("weekly");
   const [error, setError] = useState("");
-  const [date, setDate] = useState("");
-  const [month, setMonth] = useState("");
-  const [year, setYear] = useState("");
-  const [selectedItem, setSelectedItem] = useState("daily");
 
   // useEffect(() => {
   //   const fetchData = async () => {
@@ -65,49 +53,6 @@ export default function Dashboard() {
   //   fetchData();
   // }, [token, time]);
 
-  const handleReportTime = (time) => {
-    setSelectedItem(time);
-    switch (time) {
-      case "daily":
-        setYear("");
-        setMonth("");
-        break;
-      case "monthly":
-        setYear("");
-        setDate("");
-        break;
-      case "yearly":
-        setDate("");
-        setMonth("");
-        break;
-      default:
-        setYear("");
-        setMonth("");
-        setDate("");
-        break;
-    }
-  }
-
-  const downloadPDF = async () => {
-    try {
-      const { data } = await axiosInstance.get(`/api/report/?year=${year}&month=${month}&date=${date}`, 
-      {
-        responseType: "blob",
-        headers: { Accept: "application/pdf" }
-      });
-
-      const filename = "report.pdf";
-      const blobObj = new Blob([data], { type: "application/pdf" });
-      const anchorlink = document.createElement("a");
-      anchorlink.href = window.URL.createObjectURL(blobObj)
-      anchorlink.setAttribute("download", filename);
-      anchorlink.click();
-    }
-    catch (err) {
-      setError(getError(err));
-    }
-  }
-
   useTitle("Dashboard");
 
   return (
@@ -115,86 +60,7 @@ export default function Dashboard() {
       {error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <Row>
-            <Col md={5}>
-              <Card>
-                <Card.Header as="h5" className="card-header-primary">
-                  <HiClipboardDocumentList style={{ fontSize: "2rem" }} />{" "}
-                  Warehouse Report
-                </Card.Header>
-                <Card.Body className="f-center" style={{ flexDirection: "column" }}>
-                  <h6 className="mb-3">Get every single report of your warehouse for all orders in format of Daily/Monthly/Yearly reports .</h6>
-                  <div style={{ padding: "0.7rem", backgroundColor: "#f3efefba", display: "flex", justifyContent: "space-evenly", borderRadius: "0.5rem", width: "90%" }}>
-                    {["daily", "monthly", "yearly"].map((t) => (
-                      <div key={t} className={`bg-color ${t === selectedItem ? "active" : ''}`} onClick={() => handleReportTime(t)}>
-                        {t[0].toUpperCase() + t.slice(1)}
-                      </div>
-                    ))}
-                  </div>
-                  <div className="mt-3 w-100">
-                    {selectedItem === "daily" &&
-                      <Form.Group className="mb-3">
-                        <Form.Control
-                          value={date}
-                          type="date"
-                          placeholder="Select Date"
-                          onChange={(e) => setDate(e.target.value)}
-                        />
-                      </Form.Group>
-                    }
-
-                    {selectedItem === "monthly" &&
-                      <Form.Select className="mb-3" onChange={(e) => setMonth(e.target.value)}>
-                        <option key="blankChoice" hidden value>
-                          Select Month
-                        </option>
-                        {months.map((m) => <option key={m} value={m}>{m}</option>)}
-                      </Form.Select>
-                    }
-
-                    {selectedItem === "yearly" &&
-                      <Form.Select className="mb-3" onChange={(e) => setYear(e.target.value)}>
-                        <option key="blankChoice" hidden value>Select Year</option>
-                        {years().map((y) => <option key={y} value={y}>{y}</option>)}
-                      </Form.Select>
-                    }
-                  </div>
-
-                  <Button variant="outline-info" size="lg" style={{ backgroundColor: "#edf4fd" }} onClick={downloadPDF}>
-                    Get Report <HiDownload />
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={5}>
-              <Card>
-                <Card.Header as="h5" className="card-header-primary">
-                  <TbReportMoney style={{ fontSize: "2rem" }} />{" "}
-                  Bond Report
-                </Card.Header>
-                <Card.Body className="f-center" style={{ flexDirection: "column" }}>
-                  <h6>Get every single detail for Bond report of orders that you are managing.</h6>
-                  <p className="m-3">Select the date for bond Report</p>
-
-                  <div className="mt-3 w-100">
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        value={date}
-                        type="date"
-                        placeholder="Select Date"
-                        onChange={(e) => setDate(e.target.value)}
-                      />
-                    </Form.Group>
-                  </div>
-
-                  <Button variant="outline-info" size="lg" style={{ backgroundColor: "#edf4fd" }} onClick={downloadPDF}>
-                    Get Report <HiDownload />
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+        <> <h1>Dashboard</h1>
           {
           /*<Row
             className="mb-3 pb-2"

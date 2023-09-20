@@ -4,7 +4,7 @@ import { Store } from "../../states/store";
 import { ToastContainer, toast } from "react-toastify";
 import reducer from "./state/reducer";
 import { create } from "./state/action";
-import { useTitle, AddForm, AutocompleteSearch } from "../../components";
+import { useTitle, AddForm, AutocompleteSearch, RadioInput } from "../../components";
 import { Col, Row } from "react-bootstrap";
 import { toastOptions } from "../../utils/error";
 
@@ -19,21 +19,56 @@ export default function AddController() {
   });
 
   const transactionData = {
-    orderId: "",
+    type: "credit",
+    // orderId: "",
+    // warehouseId: "",
     amount: "",
     mode: "cash",
     status: "processing",
+    desc: "",
   };
   const [info, setInfo] = useState(transactionData);
   const [order, setOrder] = useState();
+  const [warehouse, setWarehouse] = useState();
+  const [type, setType] = useState("order");
 
   const attr = [
     {
+      type: "radio",
+      col: 4,
+      topLabel: "Transaction Type",
+      props: [
+        {
+          label: "Credit",
+          inline: true,
+          value: "credit",
+          name: "type",
+          checked: (info.type === "credit"),
+        },
+        {
+          label: "Debit",
+          inline: true,
+          value: "debit",
+          name: "type",
+          checked: (info.type === "debit"),
+        }
+      ]
+    },
+    {
       type: "number",
-      col: 12,
+      col: 6,
       props: {
         label: "Amount",
         name: "amount",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Description",
+        name: "desc",
         required: true,
       }
     },
@@ -62,8 +97,17 @@ export default function AddController() {
   ];
 
   const setOrderHandler = (order) => {
-    setInfo({ ...info, orderId: order.id });
     setOrder(order);
+  };
+
+  const setWarehouseHandler = (warehouse) => {
+    setWarehouse(warehouse);
+  };
+
+  const typeHandler = (e) => {
+    setType(e.target.value);
+    setOrder(null);
+    setWarehouse(null);
   };
 
   const resetForm = () => {
@@ -72,12 +116,22 @@ export default function AddController() {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!info.orderId) {
-      toast.warning("Please select an order.", toastOptions);
-      return;
+    switch (type) {
+      case 'order':
+        if (!order) {
+          toast.warning("Please select an order.", toastOptions);
+          return;
+        }
+        await create(dispatch, token, { ...info, orderId: order.id });
+
+      case 'warehouse':
+        if (!warehouse) {
+          toast.warning("Please select a warehouse.", toastOptions);
+          return;
+        }
+        await create(dispatch, token, { ...info, warehouseId: warehouse.id });
     }
 
-    await create(dispatch, token, info);
     resetForm();
   };
 
@@ -94,35 +148,72 @@ export default function AddController() {
       reducerProps={{ loading: loadingAdd, error, success, dispatch }}
     >
       <Row>
-        <Col md={2}>Select Order</Col>
-        <Col md={4}>
-          <AutocompleteSearch onSelect={setOrderHandler} searchType="order" />
+        <p>Select Transaction Category</p>
+        <Col md={3}>
+          <RadioInput label="Order" name="order" value="order" checked={type === "order"} onChange={typeHandler} />
         </Col>
-
-        <Col md={6} className="mt-3">
-          {order &&
-            <div className='d-flex '>
-              <div className='me-3'>
-                <img src={order.user?.avatar} alt="img" width={50} height={50} />
-              </div>
-
-              <div>
-                <span><b>Order Id - {order.id}</b></span>
-                <hr style={{ margin: "0px", color: "#36454F" }} />
-                <span style={{ fontSize: "0.9rem" }}><b>Qty: </b>{order.items?.length}</span>
-                <hr style={{ margin: "0px", color: "#36454F" }} />
-                <span style={{ fontSize: "0.9rem" }}><b>Status: </b>{order.status}</span>
-                <hr style={{ margin: "0px", color: "#36454F" }} />
-                <span style={{ fontSize: "0.9rem" }}><b>User: </b>{order.user?.fullname}</span>
-                <hr style={{ margin: "0px", color: "#36454F" }} />
-                <span style={{ fontSize: "0.9rem" }}><b>Warehouse: </b>{order.warehouse?.name}</span>
-                <hr style={{ margin: "0px", color: "#36454F" }} />
-              </div>
-            </div>
-          }
+        <Col md={3}>
+          <RadioInput label="Warehouse" name="warehouse" value="warehouse" checked={type === "warehouse"} onChange={typeHandler} />
         </Col>
       </Row>
+      <Row>
+        {type === "order" ?
+          <>
+            <Col md={2} >Select Order</Col>
+            <Col md={4}>
+              <AutocompleteSearch onSelect={setOrderHandler} searchType="order" />
+            </Col>
+
+            <Col md={6}>
+              {order &&
+                <div className='d-flex'>
+                  <div className='me-3'>
+                    <img src={order.user?.avatar} alt="img" width={50} height={50} />
+                  </div>
+
+                  <div>
+                    <span><b>Order Id - {order.id}</b></span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}><b>Qty: </b>{order.items?.length}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}><b>Status: </b>{order.status}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}><b>User: </b>{order.user?.fullname}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}><b>Warehouse: </b>{order.warehouse?.name}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                  </div>
+                </div>
+              }
+            </Col>
+          </> :
+          <>
+            <Col md={2} >Select Warehouse</Col>
+            <Col md={4}>
+              <AutocompleteSearch onSelect={setWarehouseHandler} searchType="warehouse" />
+            </Col>
+
+            <Col md={6}>
+              {warehouse &&
+                <div className='d-flex '>
+                  <div className='me-3'>
+                    <img src={warehouse.image} alt="img" width={50} height={50} />
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: "700" }}>{warehouse.name}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}>{warehouse.manager?.fullname}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                    <span style={{ fontSize: "0.9rem" }}>{warehouse.controller?.fullname}</span>
+                    <hr style={{ margin: "0px", color: "#36454F" }} />
+                  </div>
+                </div>
+              }
+            </Col>
+          </>
+        }
+      </Row>
       <ToastContainer />
-    </AddForm>
+    </AddForm >
   );
 }

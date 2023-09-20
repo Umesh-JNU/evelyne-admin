@@ -43,11 +43,14 @@ export default function AdminLoginScreen() {
         navigate("/admin/dashboard");
       }, 2000);
     }
+  }, [token]);
+
+  useEffect(() => {
     if (error) {
       toast.error(error, toastOptions);
       clearErrors(dispatch);
     }
-  }, [error, token]);
+  }, [error]);
 
   useTitle("Login");
   return (
@@ -109,10 +112,10 @@ export default function AdminLoginScreen() {
                   </Col>
                 </Row>
               </Form>
-              <ToastContainer />
             </Card.Body>
           </Card>
         </Container>}
+      <ToastContainer />
     </>
   );
 }

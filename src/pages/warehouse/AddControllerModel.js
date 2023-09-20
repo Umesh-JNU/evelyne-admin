@@ -114,7 +114,7 @@ export default function AddControllerModel(props) {
       setData={() => { }}
       inputFieldProps={[]}
       submitHandler={submitHandler}
-      target={-1}
+      target={''}
       successMessage="Warehouse's Controller Updated Succesfully."
       reducerProps={{ loadingUpdate, error, success, dispatch }}
     >

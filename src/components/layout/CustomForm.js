@@ -32,10 +32,11 @@ import SubmitButton from './SubmitButton';
       value={value}
     />
  */
+
 const TextInput = (props) => {
   return (
     <Form.Group className="mb-3">
-      <Form.Label>{props.label}</Form.Label>
+      {props.label && <Form.Label>{props.label}</Form.Label>}
       <Form.Control {...props} />
     </Form.Group>
   )
@@ -57,9 +58,35 @@ const TextInput = (props) => {
 const CheckInput = (props) => {
   return (
     <Form.Group className="mb-3">
-      <Form.Label>{props.checklabel}</Form.Label>
+      {props.checklabel && <Form.Label>{props.checklabel}</Form.Label>}
       <Form.Check className='checkbox'
         type='checkbox'
+        {...props}
+      />
+    </Form.Group>
+  )
+};
+
+/**
+ * Radio input component for the form.
+ * @param {Object} props - Props for the radio input component.
+ * @param {string} props.checklabel - Label for the radio input.
+ * @returns {JSX.Element} Radio input component.
+ * 
+ * @example
+ * <RadioInput
+      checklabel="Check Box"
+      onChange={changeHanlder}
+      value={value}
+    />
+ */
+const RadioInput = (props) => {
+  console.log({ radio: props });
+  return (
+    <Form.Group className="mb-3">
+      {props.labelAbove && <Form.Label>{props.labelAbove}</Form.Label>}
+      <Form.Check
+        type='radio'
         {...props}
       />
     </Form.Group>
@@ -165,7 +192,7 @@ const SelectInput = (props) => {
   </AddForm>
  */
 const EditForm = (props) => {
-  console.log("edit", { props })
+  // console.log("edit", { props })
   const navigate = useNavigate();
 
   const {
@@ -215,7 +242,7 @@ const EditForm = (props) => {
           <Container className="small-container">
             <Row>
               {inputFieldProps.map(({ type, col = 6, props }) => {
-                console.log("edit", { type, col, props, key: props.name });
+                // console.log("edit", { type, col, props, key: props.name });
                 switch (type) {
                   case "check":
                     return (
@@ -311,7 +338,7 @@ const AddForm = (props) => {
             <Form onSubmit={submitHandler}>
               <Card.Body>
                 <Row>
-                  {inputFieldProps.map(({ type, col = 6, props }) => {
+                  {inputFieldProps.map(({ type, col = 6, topLabel, props }) => {
                     // console.log({ type, col, props, key: props.name });
                     switch (type) {
                       case "check":
@@ -322,6 +349,20 @@ const AddForm = (props) => {
                               onChange={(e) => setData({ ...data, [props.name]: e.target.checked })}
                               value={data[props.name]}
                             />
+                          </Col>
+                        )
+                      case "radio":
+                        return (
+                          <Col key={"radio"} md={col}>
+                            <p>{topLabel}</p>
+                            <div className='d-flex justify-content-evenly'>
+                              {props.map(radioProps =>
+                                <RadioInput
+                                   {...radioProps}
+                                  onChange={(e) => setData({ ...data, [radioProps.name]: e.target.value })}
+                                />
+                              )}
+                            </div>
                           </Col>
                         )
                       case "select":
@@ -360,4 +401,4 @@ const AddForm = (props) => {
   )
 }
 
-export { AddForm, EditForm, TextInput, CheckInput, SelectInput };
+export { AddForm, EditForm, TextInput, CheckInput, SelectInput, RadioInput };

@@ -73,11 +73,12 @@ export default function ViewCard(props) {
     image_url,
     successMsg,
     reducerProps,
+    isEdit = true,
   } = props;
 
   const { loading, error, dispatch, success } = reducerProps;
 
-  console.log({error});
+  console.log({ error });
   useEffect(() => {
     if (error) {
       toast.error(error, toastOptions);
@@ -95,67 +96,70 @@ export default function ViewCard(props) {
       {/* {error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : ( */}
-        <Card>
-          <Card.Header>
-            {title
-              ? <Card.Title>{title}</Card.Title>
-              : <Skeleton count={1} height={35} width={200} baseColor='#afafaf' />
-            }
+      <Card>
+        <Card.Header>
+          {title
+            ? <Card.Title>{title}</Card.Title>
+            : <Skeleton count={1} height={35} width={200} baseColor='#afafaf' />
+          }
+
+          {isEdit &&
             <div className="card-tools">
               <FaEdit
                 style={{ color: "blue" }}
                 onClick={() => setModalShow(true)}
               />
             </div>
-          </Card.Header>
-          <Card.Body>
-            {isImage
-              ?
-              <Row>
-                <Col md={4}>
-                  {loading ? <Skeleton height={200} /> :
-                    <img
-                      className="img-fluid"
-                      src={image_url}
-                      alt=""
-                      width={"200px"}
-                      height={"200px"}
-                    />}
-                </Col>
-                <Col>
-                  <Row>
-                    {fields && fields.map(([k, attr]) => {
-                      // console.log({ k, attr })
-                      return (
-                        <Col key={k} md={4}>
-                          <p className="mb-0">
-                            <strong>{k}</strong>
-                          </p>
-                          <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
-                        </Col>
-                      )
-                    })}
-                  </Row>
-                </Col>
-              </Row>
-              :
-              <Row>
-                {fields && fields.map(([k, attr]) => {
-                  // console.log({ k, attr })
-                  return (
-                    <Col key={k} md={4}>
-                      <p className="mb-0">
-                        <strong>{k}</strong>
-                      </p>
-                      <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
-                    </Col>
-                  )
-                })}
-              </Row>
-            }
-            {props.children}
-          </Card.Body>
-        </Card>
+          }
+        </Card.Header>
+        <Card.Body>
+          {isImage
+            ?
+            <Row>
+              <Col md={4}>
+                {loading ? <Skeleton height={200} /> :
+                  <img
+                    className="img-fluid"
+                    src={image_url}
+                    alt=""
+                    width={"200px"}
+                    height={"200px"}
+                  />}
+              </Col>
+              <Col>
+                <Row>
+                  {fields && fields.map(([k, attr]) => {
+                    // console.log({ k, attr })
+                    return (
+                      <Col key={k} md={4}>
+                        <p className="mb-0">
+                          <strong>{k}</strong>
+                        </p>
+                        <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
+                      </Col>
+                    )
+                  })}
+                </Row>
+              </Col>
+            </Row>
+            :
+            <Row>
+              {fields && fields.map(([k, attr]) => {
+                // console.log({ k, attr })
+                return (
+                  <Col key={k} md={4}>
+                    <p className="mb-0">
+                      <strong>{k}</strong>
+                    </p>
+                    <p>{loading ? <Skeleton /> : dynamicComp(data[attr])}</p>
+                  </Col>
+                )
+              })}
+            </Row>
+          }
+          {props.children}
+        </Card.Body>
+      </Card>
       {/* )} */}
     </MotionDiv>
   )

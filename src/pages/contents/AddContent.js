@@ -19,6 +19,8 @@ export default function AddController() {
     contact_no: "",
     email: "",
     about_us: "",
+    terms_and_cond: "",
+    privacy_policy: "",
   };
   const contentAttr = [
     {
@@ -46,6 +48,28 @@ export default function AddController() {
       props: {
         label: "About Us",
         name: "about_us",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        as: "textarea",
+        rows: 3,
+        label: "Terms and Conditions",
+        name: "terms_and_cond",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        as: "textarea",
+        rows: 3,
+        label: "Privacy Policy",
+        name: "privacy_policy",
         required: true,
       }
     }

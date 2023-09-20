@@ -45,12 +45,51 @@ const ViewTransaction = () => {
   return (
     <ViewCard
       title={"Transaction Details"}
-      data={{ ...transaction, orderId: transaction?.order?.id, fullname: transaction?.order?.user?.fullname }}
-      keyProps={{ "Transaction Id": "id", "Amount": "amount", "Payer Name": "fullname", "OrderId": "orderId", "Payment Mode": "mode", "Created At": "createdAt", "Last Update": "updatedAt" }}
+      data={transaction}
+      keyProps={{ "Transaction Id": "id", "Amount": "amount", "Payment Mode": "mode", "Created At": "createdAt", "Last Update": "updatedAt" }}
       reducerProps={{ error, loading, dispatch }}
+      isEdit={false}
     >
+      <Row>
+        {loading
+          ? <Skeleton count={3} />
+          : transaction.order
+            ? <>
+              <h5>Order Details</h5>
+              <Col md={4}>
+                <p className="mb-0">
+                  <strong>orderId</strong>
+                </p>
+                <p>{transaction.orderId}</p>
+              </Col>
+
+              <Col md={4}>
+                <p className="mb-0">
+                  <strong>Payer Name</strong>
+                </p>
+                <p>{transaction.fullname}</p>
+              </Col>
+            </>
+            : <>
+              <h5>Warehouse Details</h5>
+              <Col md={4}>
+                <p className="mb-0">
+                  <strong>WarehouseId</strong>
+                </p>
+                <p>{transaction.warehouseId}</p>
+              </Col>
+
+              <Col md={4}>
+                <p className="mb-0">
+                  <strong>Warehouse Name</strong>
+                </p>
+                <p>{transaction.warehouseName}</p>
+              </Col>
+            </>
+        }
+      </Row>
       <div className="mt-3 d-flex align-items-center">
-        <p className="p-bold m-0 me-3">Statistics For</p>
+        <p className="p-bold m-0 me-3">Transaction Status</p>
         {loading ? <Skeleton /> :
           <SelectInput
             grpStyle="mb-0"

@@ -15,6 +15,7 @@ import {
 import reducer from "./state/reducer";
 import { getAll, del } from "./state/action";
 import { toastOptions } from "../../utils/error";
+import { IoMdOpen } from "react-icons/io";
 
 export default function Users() {
   const navigate = useNavigate();
@@ -61,6 +62,8 @@ export default function Users() {
     "Contact No.",
     "Email",
     "About Us",
+    "T&C",
+    "Privacy Policy",
     "Action",
   ];
 
@@ -88,6 +91,18 @@ export default function Users() {
                 <td>{content.contact_no}</td>
                 <td>{content.email}</td>
                 <td>{content.about_us}</td>
+                <td>
+                  <IoMdOpen
+                    className="open-model"
+                    onClick={() => navigate(`/admin/view/content/${content.id}`)}
+                  />
+                </td>
+                <td>
+                  <IoMdOpen
+                    className="open-model"
+                    onClick={() => navigate(`/admin/view/content/${content.id}`)}
+                  />
+                </td>
                 <td>
                   <ViewButton
                     onClick={() => navigate(`/admin/view/content/${content.id}`)}

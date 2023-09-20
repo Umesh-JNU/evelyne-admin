@@ -59,9 +59,9 @@ export default function TransactionTable() {
   const column = [
     "S.No",
     "Id",
+    "Type",
     "Amount",
-    "Payer Name",
-    "OrderId",
+    "Order/Warehouse",
     "Payment Mode",
     "Status",
     "Action",
@@ -91,9 +91,9 @@ export default function TransactionTable() {
               <tr key={transaction.id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
                 <td>{transaction.id}</td>
+                <td>{transaction.type}</td>
                 <td>{transaction.amount}</td>
-                <td>{transaction.order?.user?.fullname}</td>
-                <td>{transaction.order?.id}</td>
+                <td>{transaction.order ? "Order" : "Warehouse"}</td>
                 <td>{transaction.mode}</td>
                 <td>{transaction.status}</td>
                 <td>

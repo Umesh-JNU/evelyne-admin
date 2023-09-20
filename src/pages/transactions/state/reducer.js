@@ -18,10 +18,18 @@ export default function transactionReducer(state, action) {
       };
 
     case "FETCH_DETAILS_SUCCESS":
+      var transaction = action.payload.transaction;
+      if (transaction.order) {
+        transaction = {...transaction, orderId: transaction.order.id, fullname: transaction.order.user.fullname };
+      }
+      else if (transaction.warehouse) {
+        transaction = { ...transaction, warehouseId: transaction.warehouse.id, warehouseName: transaction.warehouse.name };
+      }
+
       return {
         ...state,
         loading: false,
-        transaction: action.payload.transaction
+        transaction
       };
     case "ADD_SUCCESS":
       return { ...state, loadingAdd: false, success: true };

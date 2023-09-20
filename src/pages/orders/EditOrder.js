@@ -28,8 +28,8 @@ export default function EditUserModel(props) {
     DDCOM_no: "",
     quantity_decl: "",
     physical_quant: "",
-    arrival_date: "",
-    last_storage_date: "",
+    arrival_date: null,
+    last_storage_date: null,
     truck_no: "",
     container_no: "",
     transporter: "",
@@ -39,8 +39,7 @@ export default function EditUserModel(props) {
     comment: "",
     name_counter: "",
     counter_valid: false,
-    name_manager: "",
-    manager_valid: false,
+    // manager_valid: false,
     customs: "",
     client_valid: false,
     status: "in-bound",
@@ -124,7 +123,6 @@ export default function EditUserModel(props) {
         label: "Arrival Date",
         name: "arrival_date",
         value: orderData.arrival_date,
-        required: true,
       }
     },
     {
@@ -134,7 +132,6 @@ export default function EditUserModel(props) {
         label: "Last Storage Date",
         name: "last_storage_date",
         value: orderData.last_storage_date,
-        required: true,
       }
     },
     {
@@ -223,25 +220,25 @@ export default function EditUserModel(props) {
     },
     {
       type: "check",
-      col: 4,
+      col: 6,
       props: {
         checklabel: "Counter Validation",
         name: "counter_valid",
         value: orderData.counter_valid,
       }
     },
+    // {
+    //   type: "check",
+    //   col: 4,
+    //   props: {
+    //     checklabel: "Manager Approval",
+    //     name: "manager_valid",
+    //     value: orderData.manager_valid,
+    //   }
+    // },
     {
       type: "check",
-      col: 4,
-      props: {
-        checklabel: "Manager Approval",
-        name: "manager_valid",
-        value: orderData.manager_valid,
-      }
-    },
-    {
-      type: "check",
-      col: 4,
+      col: 6,
       props: {
         checklabel: "Client Validation",
         name: "client_valid",
@@ -251,20 +248,20 @@ export default function EditUserModel(props) {
   ];
   const [item, setItem] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [user, setUser] = useState();
-  const [warehouse, setWarehouse] = useState();
+  // const [user, setUser] = useState();
+  // const [warehouse, setWarehouse] = useState();
   const [info, setInfo] = useState(orderData);
 
-  const setUserHandler = (user) => {
-    setInfo({ ...info, user: user.id });
-    setUser(user);
-  };
+  // const setUserHandler = (user) => {
+  //   setInfo({ ...info, user: user.id });
+  //   setUser(user);
+  // };
 
-  const setWarehouseHandler = (warehouse) => {
-    console.log({ warehouse })
-    setInfo({ ...info, warehouse: warehouse.id });
-    setWarehouse(warehouse);
-  };
+  // const setWarehouseHandler = (warehouse) => {
+  //   console.log({ warehouse })
+  //   setInfo({ ...info, warehouse: warehouse.id });
+  //   setWarehouse(warehouse);
+  // };
 
   const itemHandler = () => {
     console.log(item, quantity, typeof quantity);
@@ -283,8 +280,8 @@ export default function EditUserModel(props) {
 
   const resetForm = () => {
     setInfo(orderData);
-    setUser();
-    setWarehouse();
+    // setUser();
+    // setWarehouse();
   };
 
   useEffect(() => {
@@ -299,8 +296,8 @@ export default function EditUserModel(props) {
         DDCOM_no: order.DDCOM_no,
         quantity_decl: order.quantity_decl,
         physical_quant: order.physical_quant,
-        arrival_date: new Date(order.arrival_date).toISOString().slice(0, 10),
-        last_storage_date: new Date(order.last_storage_date).toISOString().slice(0, 10),
+        arrival_date: order.arrival_date ? new Date(order.arrival_date).toISOString().slice(0, 10) : null,
+        last_storage_date: order.last_storage_date ? new Date(order.last_storage_date).toISOString().slice(0, 10) : null,
         truck_no: order.truck_no,
         container_no: order.container_no,
         transporter: order.transporter,
@@ -315,10 +312,9 @@ export default function EditUserModel(props) {
         customs: order.customs,
         client_valid: order.client_valid,
         status: order.status,
-        items: [],
-        warehouse: order.warehouse?.id,
-        user: order.user?.id,
         items: [...order.items],
+        // warehouse: order.warehouse?.id,
+        // user: order.user?.id,
       });
     }
 
@@ -329,14 +325,14 @@ export default function EditUserModel(props) {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    if (!info.warehouse) {
-      toast.warning("Please select a warehouse.", toastOptions);
-      return;
-    }
-    if (!info.user) {
-      toast.warning("Please select a user.", toastOptions);
-      return;
-    }
+    // if (!info.warehouse) {
+    //   toast.warning("Please select a warehouse.", toastOptions);
+    //   return;
+    // }
+    // if (!info.user) {
+    //   toast.warning("Please select a user.", toastOptions);
+    //   return;
+    // }
     if ((info.items && info.items.length === 0) || !info.items) {
       toast.warning("Please add items to create order.", toastOptions);
       return;
@@ -346,24 +342,49 @@ export default function EditUserModel(props) {
     resetForm();
   };
 
-  return (
-    <EditForm
-      {...props}
-      title="Edit Content"
-      data={info}
-      setData={setInfo}
-      inputFieldProps={orderAttr}
-      submitHandler={submitHandler}
-      target="/admin/orders"
-      successMessage="Order Updated Succesfully.  Redirecting..."
-      reducerProps={{ loadingUpdate, error, success, dispatch }}
-    >
-      <Row>
-        <Col md={2}>Select User</Col>
+  // const deleteItem = async (e, id) => {
+  //   e.preventDefault();
+  //   const index = info.items.findIndex(
+  //     (item) => item.id === id
+  //   );
+  //   console.log({ index });
+  //   if (index > -1) {
+  //     // only splice array when item is found
+  //     setInfo({
+  //       ...info, items: [
+  //         ...info.items.slice(0, index),
+
+  //         // part of the array after the given item
+  //         ...info.items.slice(index + 1),
+  //       ]
+  //     });
+  //   }
+
+  //   try {
+      
+  //   } catch (error) {
+      
+  //   }
+  // }
+
+return (
+  <EditForm
+    {...props}
+    title="Edit Content"
+    data={info}
+    setData={setInfo}
+    inputFieldProps={orderAttr}
+    submitHandler={submitHandler}
+    target="/admin/orders"
+    successMessage="Order Updated Succesfully.  Redirecting..."
+    reducerProps={{ loadingUpdate, error, success, dispatch }}
+  >
+    {/* <Row>
+        <Col md={3}>Select User</Col>
         <Col md={4}>
           <AutocompleteSearch onSelect={setUserHandler} searchType="user" />
         </Col>
-        <Col md={6}>{user && <div className='d-flex '>
+        <Col md={5}>{user && <div className='d-flex '>
           <div className='me-3'>
             <img src={user.avatar} alt="img" width={50} height={50} />
           </div>
@@ -379,12 +400,12 @@ export default function EditUserModel(props) {
           </div>
         </div>}
         </Col>
-        <Col md={2} className="mt-3">Select Warehouse</Col>
+        <Col md={3} className="mt-3">Select Warehouse</Col>
         <Col md={4} className="mt-3">
           <AutocompleteSearch onSelect={setWarehouseHandler} searchType="warehouse" />
         </Col>
 
-        <Col md={6} className="mt-3">
+        <Col md={5} className="mt-3">
           {warehouse &&
             <div className='d-flex '>
               <div className='me-3'>
@@ -401,83 +422,63 @@ export default function EditUserModel(props) {
             </div>
           }
         </Col>
-      </Row>
+      </Row> */}
 
-      <h3>Add Items</h3>
-      <Row>
-        <Col md={5}>
-          <TextInput
-            value={item}
-            label="Item"
-            onChange={(e) => setItem(e.target.value)}
-          />
-        </Col>
-        <Col md={5}>
-          <TextInput
-            label="Quantity"
-            type="number"
-            min={0}
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-          />
-        </Col>
-        <Col md={2}>
-          <Button className="mt-4" onClick={itemHandler}>
-            Add Item
-          </Button>
-        </Col>
-      </Row>
+    {/* <h3>Add Items</h3>
+    <Row>
+      <Col md={5}>
+        <TextInput
+          value={item}
+          label="Item"
+          onChange={(e) => setItem(e.target.value)}
+        />
+      </Col>
+      <Col md={5}>
+        <TextInput
+          label="Quantity"
+          type="number"
+          min={0}
+          value={quantity}
+          onChange={(e) => setQuantity(e.target.value)}
+        />
+      </Col>
+      <Col md={2}>
+        <Button className="mt-4" onClick={itemHandler}>
+          Add Item
+        </Button>
+      </Col>
+    </Row>
 
-      <Row className="mt-3">
-        {info.items && info.items.length > 0 && (
-          <Table responsive striped bordered hover>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Qauntity</th>
-                <th>Action</th>
+    <Row className="mt-3">
+      {info.items && info.items.length > 0 && (
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Qauntity</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {info.items.map(({ name, quantity, id }) => (
+              <tr key={name}       >
+                <td>{name}</td>
+                <td>{quantity}</td>
+                <td>
+                  <Button
+                    onClick={(e) => deleteItem(e, id)}
+                    type="danger"
+                    className="btn btn-danger btn-block"
+                  >
+                    Delete
+                  </Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {info.items.map(({ name, quantity }, i) => (
-                <tr key={name}       >
-                  <td>{name}</td>
-                  <td>{quantity}</td>
-                  <td>
-                    <Button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const index = info.items.findIndex(
-                          (i) =>
-                            i.name === name &&
-                            i.quantity === quantity
-                        );
-                        console.log({ index });
-                        if (index > -1) {
-                          // only splice array when item is found
-
-                          setInfo({
-                            ...info, items: [
-                              ...info.items.slice(0, index),
-
-                              // part of the array after the given item
-                              ...info.items.slice(index + 1),
-                            ]
-                          });
-                        }
-                      }}
-                      type="danger"
-                      className="btn btn-danger btn-block"
-                    >
-                      Delete
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Row>
-    </EditForm>
-  );
+            ))}
+          </tbody>
+        </Table>
+      )}
+    </Row> */}
+  </EditForm>
+);
 }

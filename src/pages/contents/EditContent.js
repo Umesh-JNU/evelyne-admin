@@ -20,6 +20,8 @@ export default function EditUserModel(props) {
     contact_no: "",
     email: "",
     about_us: "",
+    terms_and_cond: "",
+    privacy_policy: "",
   };
   const contentAttr = [
     {
@@ -49,6 +51,28 @@ export default function EditUserModel(props) {
         name: "about_us",
         required: true,
       }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        as: "textarea",
+        rows: 3,
+        label: "Terms and Conditions",
+        name: "terms_and_cond",
+        required: true,
+      }
+    },
+    {
+      type: "text",
+      col: 12,
+      props: {
+        as: "textarea",
+        rows: 3,
+        label: "Privacy Policy",
+        name: "privacy_policy",
+        required: true,
+      }
     }
   ]
   const [info, setInfo] = useState(contentData);
@@ -60,6 +84,8 @@ export default function EditUserModel(props) {
         contact_no: content.contact_no,
         email: content.email,
         about_us: content.about_us,
+        terms_and_cond: content.terms_and_cond,
+        privacy_policy: content.privacy_policy,
       });
     }
 

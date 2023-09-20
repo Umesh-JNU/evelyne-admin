@@ -109,7 +109,7 @@ export default function AssignWarehouseModel(props) {
       successMessage="Manager's Warehouse Updated Succesfully."
       reducerProps={{ loadingUpdate, error, success, dispatch }}
     >
-      <AutocompleteSearch onSelect={addWarehouseHandler} searchType="warehouse" />
+      <AutocompleteSearch onSelect={addWarehouseHandler} searchType="warehouse" unassigned="managerId" />
 
       {warehouse && <HouseTable warehouse={warehouse} />}
       <ToastContainer />

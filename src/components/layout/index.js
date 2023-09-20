@@ -10,7 +10,7 @@ import LoadingBox from "./LoadingBox";
 import SideNavBar from "./SideNavBar";
 import MotionDiv from "./MotionDiv";
 import ViewCard from "./ViewCard";
-import { AddForm, EditForm, TextInput, CheckInput, SelectInput } from "./CustomForm";
+import { AddForm, EditForm, TextInput, CheckInput, SelectInput, RadioInput } from "./CustomForm";
 import SubmitButton from "./SubmitButton";
 
 export {
@@ -28,6 +28,6 @@ export {
   SideNavBar,
   MotionDiv,
   ViewCard,
-  AddForm, EditForm, TextInput, CheckInput, SelectInput,
+  AddForm, EditForm, TextInput, CheckInput, SelectInput, RadioInput,
   SubmitButton,
 };
