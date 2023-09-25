@@ -37,11 +37,11 @@ const linkList = [
     text: "Transaction",
     url: "/admin/transactions",
   },
-  {
-    icon: <FaFileInvoiceDollar className="icon-md" />,
-    text: "Invoice",
-    url: "/admin/invoices",
-  },
+  // {
+  //   icon: <FaFileInvoiceDollar className="icon-md" />,
+  //   text: "Invoice",
+  //   url: "/admin/invoices",
+  // },
   {
     icon: <FaShoppingBasket className="icon-md" />,
     text: "Orders",
