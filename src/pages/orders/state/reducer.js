@@ -14,7 +14,7 @@ export default function orderReducer(state, action) {
       return {
         ...state,
         orders: action.payload.orders,
-        ordersCount: action.payload.ordersCount,
+        ordersCount: action.payload.orderCount,
         loading: false,
       };
 

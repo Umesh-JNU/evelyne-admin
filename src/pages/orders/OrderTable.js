@@ -60,7 +60,7 @@ export default function Orders() {
 
   const numOfPages = Math.ceil(ordersCount / resultPerPage);
   const skip = resultPerPage * (curPage - 1);
-  // console.log("nuofPage", numOfPages, resultPerPage);
+  console.log("nuofPage", numOfPages, resultPerPage);
 
   const column = [
     "S.No",
