@@ -4,16 +4,16 @@ import { Store } from "./states/store";
 
 import { AdminProtectedRoute, UnprotectedRoute } from "./routes";
 import { Header, Footer, SideNavBar, NotFound } from "./components";
-import { 
-  Dashboard, AdminLoginScreen, 
-  UserTable, ViewUser, 
-  ManagerTable, AddManager, ViewManager, 
-  ControllerTable, AddController, ViewController, 
-  WarehouseTable, AddWarehouse, ViewWarehouse, 
-  TransactionTable, AddTransaction, ViewTransaction, 
-  InvoiceTable, AddInvoice, ViewInvoice, 
-  OrderTable, AddOrder, ViewOrder, 
-  Content, AddContent, ViewContent 
+import {
+  Dashboard, AdminLoginScreen, ViewProfile,
+  UserTable, ViewUser,
+  ManagerTable, AddManager, ViewManager,
+  ControllerTable, AddController, ViewController,
+  WarehouseTable, AddWarehouse, ViewWarehouse,
+  TransactionTable, AddTransaction, ViewTransaction,
+  InvoiceTable, AddInvoice, ViewInvoice,
+  OrderTable, AddOrder, ViewOrder,
+  Content, AddContent, ViewContent
 } from "./pages";
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
 
   const routeList = [
     { path: "/admin/dashboard", comp: <Dashboard /> },
+    { path: "/view-profile", comp: <ViewProfile /> },
     { path: "/admin/users", comp: <UserTable /> },
     { path: "/admin/view/user/:id", comp: <ViewUser /> },
     { path: "/admin/managers", comp: <ManagerTable /> },

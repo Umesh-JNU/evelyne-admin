@@ -65,7 +65,7 @@ export default function Orders() {
   const column = [
     "S.No",
     "Order Id",
-    "Items",
+    // "Items",
     "User",
     "Warehouse",
     "Address",
@@ -97,12 +97,12 @@ export default function Orders() {
               <tr key={order.id} className="odd">
                 <td className="text-center">{skip + i + 1}</td>
                 <td>{order.id}</td>
-                <td>
+                {/* <td>
                   <IoMdOpen
                     className="open-model"
                     onClick={() => showModelHandler(order.items)}
                   />
-                </td>
+                </td> */}
                 <td>{order.user?.fullname}</td>
                 <td>{order.warehouse?.name}</td>
                 <td>{order.address}</td>

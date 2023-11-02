@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import { Store } from "../../states/store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
-import { ArrayView, CustomTable, useTitle, ViewCard } from "../../components";
+import { ArrayView, CustomTable, useTitle, ViewButton, ViewCard } from "../../components";
 import reducer from "./state/reducer";
 import { getDetails } from "./state/action";
 import EditOrderModel from "./EditOrder";
@@ -18,13 +18,14 @@ const keyProps = {
 
 
 const ViewOrder = () => {
+  const navigate = useNavigate();
   const { state } = useContext(Store);
   const { token } = state;
   const { id } = useParams(); // order/:id
 
   const [modalShow, setModalShow] = useState(false);
   const [arrModalShow, setArrModalShow] = useState(false);
-  const [{ loading, error, order }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, order, history }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
   });
@@ -35,6 +36,14 @@ const ViewOrder = () => {
     })();
   }, [token, id]);
 
+  const getOrderType = (type) => {
+    switch (type) {
+      case 'arrival': return 'Goods InBound';
+      case 'partial': return 'Goods OutBound';
+      case 'complete': return 'Goods Exit';
+      default: return;
+    }
+  }
   useTitle("Order Details");
   return (
     <ViewCard
@@ -43,6 +52,7 @@ const ViewOrder = () => {
       setModalShow={setModalShow}
       keyProps={keyProps}
       reducerProps={{ error, loading, dispatch }}
+      isEdit={false}
     >
       <Row>
         <Col md={8}>
@@ -72,12 +82,12 @@ const ViewOrder = () => {
             )}
         </Col>
       </Row>
-      
+
       <h4 className="mt-3">Users Details</h4>
       <Row>
         <Col md={2}>
           {loading
-            ? <Skeleton height={50} width={50}/>
+            ? <Skeleton height={50} width={50} />
             : <img
               src={order.user.avatar}
               alt=""
@@ -98,7 +108,7 @@ const ViewOrder = () => {
       <Row>
         <Col md={2}>
           {loading
-            ? <Skeleton height={50} width={50}/>
+            ? <Skeleton height={50} width={50} />
             : <img
               src={order.warehouse.image}
               alt=""
@@ -115,11 +125,32 @@ const ViewOrder = () => {
         </Col>
       </Row>
 
+      {history && history.length > 0 &&
+        <Row>
+          <Col>
+            <h4>Order History</h4>
+            {<Table responsive striped bordered hover>
+              <tbody>
+                {history.map(({ arrival_date, exit_date, id, subOrderId, orderType }) => (
+                  <tr key={id} className="odd">
+                    <td>{getOrderType(orderType)}</td>
+                    <td>{arrival_date ? arrival_date.slice(0, 10) : exit_date.slice(0, 10)}</td>
+                    <td>{id + '-' + subOrderId}</td>
+                    <td>
+                      <ViewButton onClick={() => navigate(`/admin/view/order/${id}`)} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>}
+          </Col>
+        </Row>
+      }
 
-      <EditOrderModel
+      {/* <EditOrderModel
         show={modalShow}
         onHide={() => setModalShow(false)}
-      />
+      /> */}
       {
         arrModalShow && <ArrayView
           show={arrModalShow}

@@ -45,7 +45,7 @@ const boolComp = (val) => {
 }
 
 const isDate = (date) => {
-  return (new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
+  return ((new Date(date) instanceof Date) && new Date(date) !== "Invalid Date") && !isNaN(new Date(date));
 }
 
 const dynamicComp = (val) => {
@@ -58,6 +58,7 @@ const dynamicComp = (val) => {
       // console.log({ val });
       const res = val ? (isDate(val) ? getDateTime(val) : val) : "---";
       // console.log({ res });
+      if(res.split(' ').length === 2 && res.split(' ')[1] === 'undefined') return res.split(' ')[0];
       return res;
   }
 };

@@ -22,7 +22,8 @@ export default function orderReducer(state, action) {
       return {
         ...state,
         loading: false,
-        order: action.payload.order
+        order: action.payload.order,
+        history: action.payload.history
       };
     case "ADD_SUCCESS":
       return { ...state, loadingAdd: false, success: true };

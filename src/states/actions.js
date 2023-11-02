@@ -26,3 +26,52 @@ export const login = async (ctxDispatch, dispatch, credentials) => {
 export const clearErrors = async (dispatch) => {
   dispatch({ type: 'CLEAR_ERROR' });
 };
+
+export const clearSuccess = async (dispatch) => {
+  setTimeout(() => {
+    dispatch({ type: 'CLEAR_SUCCESS' });
+  }, 2000);
+}
+
+export const getProfile = async (dispatch, token) => {
+  try {
+    dispatch({ type: "FETCH_REQUEST" });
+    const { data } = await axiosInstance.get("/api/user/profile",
+      { headers: { Authorization: token } }
+    );
+
+    console.log("data", data);
+    if (data) {
+      dispatch({ type: "FETCH_SUCCESS", payload: data.user });
+    }
+    else {
+      dispatch({ type: "FETCH_FAIL", payload: getError(data) });
+    }
+  } catch (err) {
+    dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+  }
+}
+
+export const updateProfile = async (ctxDispatch, dispatch, token, userInfo) => {
+  try {
+    dispatch({ type: "UPDATE_REQUEST" });
+
+    const { data } = await axiosInstance.put(`/api/user/update-profile`, userInfo, {
+      headers: { Authorization: token },
+    });
+
+    console.log("update profile", { data })
+    if (data.isUpdated) {
+      const res = await axiosInstance.get("/api/user/profile",
+        { headers: { Authorization: token } }
+      );
+
+      setTimeout(() => {
+        ctxDispatch({ type: "PROFILE_UPDATE", payload: res.data.user });
+        dispatch({ type: "UPDATE_SUCCESS" });
+      }, 2000);
+    }
+  } catch (err) {
+    dispatch({ type: "UPDATE_FAIL", payload: getError(err) });
+  }
+};

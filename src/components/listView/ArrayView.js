@@ -38,7 +38,7 @@ export default function ArrayView(props) {
   const { title, arr } = props;
   let columns;
   if (arr.length > 0) columns = Object.entries(props.column);
-
+  console.log({ columns })
   return (
     <Modal
       {...props}
@@ -59,24 +59,28 @@ export default function ArrayView(props) {
               <thead>
                 <tr>
                   <th>S.No</th>
-                  {columns && columns.map(([col, _]) => <th key={col}>{col}</th>)}
+                  {columns && columns.map(([col, _], i) => <th key={i}>{col}</th>)}
                 </tr>
               </thead>
               <tbody>
                 {arr &&
-                  arr.map((row, i) => (
-                    <tr key={i} className="odd">
+                  arr.map((row, i) => {
+                    console.log({row});
+                    return (
+                    <tr key={row.id} className="odd">
                       <td className="text-center">{i + 1}</td>
                       {columns &&
                         columns.map(([_, col], i) => {
+                          console.log({_, col, i})
                           return (
                             <>
-                              <td key={col + i}>{row[col]}</td>
+                              <td>{row[col]}</td>
                             </>
                           );
                         })}
                     </tr>
-                  ))}
+                  )
+                      })}
               </tbody>
             </Table>
           ) : (
