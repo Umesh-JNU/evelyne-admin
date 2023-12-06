@@ -27,7 +27,7 @@ export const getAll = async (dispatch, token, curPage, resultPerPage, query) => 
       url,
       { headers: { Authorization: token } }
     );
-    console.log(res.data);
+    console.log("all content", res.data);
     dispatch({ type: "FETCH_SUCCESS", payload: res.data });
   } catch (error) {
     dispatch({ type: "FETCH_FAIL", payload: getError(error) });

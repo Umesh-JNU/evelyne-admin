@@ -19,6 +19,7 @@ export default function EditWarehouse(props) {
   const warehouseData = {
     name: "",
     capacity: 1000,
+    desc: ""
     // image: "",
   };
   const attr = [
@@ -29,6 +30,16 @@ export default function EditWarehouse(props) {
         label: "Warehouse Name",
         placeholder: "Warehouse Name",
         name: "name",
+        required: true,
+      }
+    }, 
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Warehouse Description",
+        placeholder: "Warehouse Description",
+        name: "desc",
         required: true,
       }
     }, {
@@ -51,6 +62,7 @@ export default function EditWarehouse(props) {
       setInfo({
         name: warehouse.name,
         capacity: warehouse.capacity,
+        desc: warehouse.desc
       })
     }
 

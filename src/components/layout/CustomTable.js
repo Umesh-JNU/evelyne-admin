@@ -19,18 +19,20 @@ export default function CustomTable(props) {
     searchProps,
     isCreateBtn,
     createBtnProps,
+    isTitle,
+    title
   } = props;
   const { setResultPerPage } = rowProps;
   const { numOfPages, curPage } = pageProps;
   let searchInput, setSearchInput, setQuery;
-  if(search) {
+  if (search) {
     searchInput = searchProps.searchInput;
     setSearchInput = searchProps.setSearchInput;
     setQuery = searchProps.setQuery;
   }
 
   let createURL, text;
-  if(isCreateBtn) {
+  if (isCreateBtn) {
     createURL = createBtnProps.createURL;
     text = createBtnProps.text;
   }
@@ -56,6 +58,12 @@ export default function CustomTable(props) {
               type="search"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  setQuery(searchInput);
+                  pageHandler(1); // Call your search function here
+                }
+              }}
             />
             <InputGroup.Text
               style={{ cursor: "pointer" }}
@@ -68,6 +76,7 @@ export default function CustomTable(props) {
             </InputGroup.Text>
           </InputGroup>
         </div>}
+        {isTitle && <h3 className="mb-0">{title}</h3>}
       </Card.Header>
       <Card.Body>
         <Table responsive striped bordered hover>

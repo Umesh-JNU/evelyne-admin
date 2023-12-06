@@ -18,6 +18,7 @@ export default function AddWarehouse() {
   const warehouseData = {
     name: "",
     capacity: 1000,
+    desc: ""
     // image: "",
   };
   const attr = [
@@ -30,7 +31,18 @@ export default function AddWarehouse() {
         name: "name",
         required: true,
       }
-    }, {
+    }, 
+    {
+      type: "text",
+      col: 12,
+      props: {
+        label: "Warehouse Description",
+        placeholder: "Warehouse Description",
+        name: "desc",
+        required: true,
+      }
+    }, 
+    {
       type: "number",
       col: 12,
       props: {

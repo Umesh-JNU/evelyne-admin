@@ -81,8 +81,10 @@ export default function Users() {
           paging={numOfPages > 0}
           pageProps={{ numOfPages, curPage }}
           pageHandler={curPageHandler}
-          isCreateBtn={true}
+          isCreateBtn={contents && contents.length === 1 ? false : true}
           createBtnProps={{ createURL: "/admin/content/create", text: "Content" }}
+          isTitle={contents && contents.length === 1 ? true : false}
+          title={'Content'}
         >
           {contents &&
             contents.map((content, i) => (

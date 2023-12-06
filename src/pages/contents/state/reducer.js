@@ -11,7 +11,7 @@ export default function contentReducer(state, action) {
     case "FETCH_SUCCESS":
       return {
         ...state,
-        contents: action.payload.contents,
+        contents: [action.payload.contents],
         contentsCount: action.payload.contentsCount,
         loading: false,
       };
