@@ -6,7 +6,7 @@ import { AdminProtectedRoute, UnprotectedRoute } from "./routes";
 import { Header, Footer, SideNavBar, NotFound } from "./components";
 import {
   Dashboard, AdminLoginScreen, ViewProfile,
-  UserTable, ViewUser,
+  UserTable, AddUser, ViewUser,
   ManagerTable, AddManager, ViewManager,
   ControllerTable, AddController, ViewController,
   WarehouseTable, AddWarehouse, ViewWarehouse,
@@ -29,6 +29,7 @@ function App() {
     { path: "/admin/dashboard", comp: <Dashboard /> },
     { path: "/view-profile", comp: <ViewProfile /> },
     { path: "/admin/users", comp: <UserTable /> },
+    { path: "/admin/user/create", comp: <AddUser /> },
     { path: "/admin/view/user/:id", comp: <ViewUser /> },
     { path: "/admin/managers", comp: <ManagerTable /> },
     { path: "/admin/manager/create", comp: <AddManager /> },

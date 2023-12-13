@@ -82,7 +82,8 @@ export default function Users() {
           pageHandler={curPageHandler}
           search={true}
           searchProps={{ searchInput, setSearchInput, setQuery }}
-          isCreateBtn={false}
+          isCreateBtn={true}
+          createBtnProps={{ createURL: "/admin/user/create", text: "User" }}
         >
           {users &&
             users.map((user, i) => (

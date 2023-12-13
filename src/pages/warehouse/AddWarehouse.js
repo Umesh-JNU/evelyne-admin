@@ -63,7 +63,7 @@ export default function AddWarehouse() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    await create(dispatch, token, info);
+    await create(dispatch, token, { ...info, capacity: parseInt(info.capacity) });
     resetForm();
   };
 

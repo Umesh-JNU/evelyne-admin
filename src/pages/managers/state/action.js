@@ -37,7 +37,7 @@ export const getAll = async (dispatch, token, curPage, resultPerPage, query) => 
 export const del = async (dispatch, token, id) => {
   if (
     window.confirm(
-      "Are you sure you want to delete this user?\n\nNote: All Related orders and addresses will also be deleted."
+      "Are you sure you want to delete this manager?"
     ) === true
   ) {
     try {

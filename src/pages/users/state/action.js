@@ -1,6 +1,24 @@
 import axiosInstance from "../../../utils/axiosUtil";
 import { getError } from "../../../utils/error";
 
+export const create = async (dispatch, token, input) => {
+  try {
+    dispatch({ type: 'ADD_REQUEST' });
+    const { data } = await axiosInstance.post(
+      "/api/admin/user", { ...input, role: 'user' },
+      { headers: { Authorization: token } }
+    );
+
+    console.log("user add data", data);
+
+    setTimeout(() => {
+      dispatch({ type: 'ADD_SUCCESS' });
+    }, 1500);
+  } catch (err) {
+    dispatch({ type: "ADD_FAIL", payload: getError(err) });
+  }
+};
+
 export const getAll = async (dispatch, token, curPage, resultPerPage, query) => {
   let url = `/api/admin/users/?keyword=${query}&resultPerPage=${resultPerPage}&currentPage=${curPage}`;
   try {

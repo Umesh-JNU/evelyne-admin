@@ -3,7 +3,7 @@ export default function userReducer(state, action) {
     case "FETCH_REQUEST":
     case "FETCH_DETAILS_REQUEST":
     case "ADD_REQUEST":
-      return { ...state, loading: true };
+      return { ...state, loadingAdd: true };
     case "UPDATE_REQUEST":
       return { ...state, loadingUpdate: true };
 
@@ -22,7 +22,7 @@ export default function userReducer(state, action) {
         user: action.payload.user
       };
     case "ADD_SUCCESS":
-      return { ...state, loading: false, success: true };
+      return { ...state, loadingAdd: false, success: true };
     case "UPDATE_SUCCESS":
       return { ...state, loadingUpdate: false, success: true };
 
@@ -41,7 +41,7 @@ export default function userReducer(state, action) {
     case "ADD_FAIL":
     case "FETCH_DETAILS_FAIL":
     case "UPDATE_FAIL":
-      return { ...state, loading: false, loadingUpdate: false, error: action.payload };
+      return { ...state, loading: false, loadingAdd: false, loadingUpdate: false, error: action.payload };
 
     case 'CLEAR_ERROR':
       return { ...state, error: null };

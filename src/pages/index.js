@@ -3,6 +3,7 @@ import AdminLoginScreen from "./AdminLoginScreen";
 import ViewProfile from "./ViewProfile";
 
 import UserTable from "./users/UserTable";
+import AddUser from "./users/AddUser";
 import ViewUser from "./users/ViewUser";
 import ManagerTable from "./managers/ManagerTable";
 import AddManager from "./managers/AddManager";
@@ -33,7 +34,7 @@ import ViewContent from "./contents/ViewContent";
 
 export { 
   Dashboard, AdminLoginScreen, ViewProfile,
-  UserTable, ViewUser, 
+  UserTable, AddUser, ViewUser, 
   ManagerTable, AddManager, ViewManager, 
   ControllerTable, AddController, ViewController, 
   WarehouseTable, AddWarehouse, ViewWarehouse, 
