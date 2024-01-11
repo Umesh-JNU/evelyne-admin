@@ -68,8 +68,8 @@ export default function AddContent() {
     >
       {contentType === 'CONTACT_US' ?
         <>
-          <TextInput placeholder="Enter Email" label="Email" type="email" onChange={(e) => setEmail(e.target.value)} />
-          <TextInput placeholder="Enter Contact Number" label="Contact No." onChange={(e) => setContact(e.target.value)} />
+          <TextInput placeholder="Enter Email" label="Email" type="email" onChange={(e) => setEmail(e.target.value)} required={true} />
+          <TextInput placeholder="Enter Contact Number" label="Contact No." onChange={(e) => setContact(e.target.value)} required={true} />
         </> :
         <JoditEditor
           ref={editor}

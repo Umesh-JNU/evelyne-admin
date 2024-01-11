@@ -89,8 +89,8 @@ export default function EditContent() {
     >
       {loading ? <Skeleton count={5} height={40} /> : contentType === 'CONTACT_US' ?
         <>
-          <TextInput placeholder="Enter Email" label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <TextInput placeholder="Enter Contact Number" label="Contact No." name="contact_no" value={contact} onChange={(e) => setContact(e.target.value)} />
+          <TextInput placeholder="Enter Email" label="Email" type="email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required={true} />
+          <TextInput placeholder="Enter Contact Number" label="Contact No." name="contact_no" value={contact} onChange={(e) => setContact(e.target.value)} required={true} />
         </> :
         <JoditEditor
           ref={editor}

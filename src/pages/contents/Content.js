@@ -20,7 +20,7 @@ import Skeleton from "react-loading-skeleton";
 
 const ContentCard = ({ content, url, text, onEdit, onDelete, ...props }) => {
   const navigate = useNavigate();
-
+  console.log({ c: props.children });
   return (
     <Card>
       <Card.Header>
@@ -122,11 +122,11 @@ export default function Content() {
               email: "", contact_no: ""
             })}
           >
-            {content && content.email &&
-              <p className="p-bold">Email: {content.email}</p>
-            }
-            {content && content.contact_no &&
-              <p className="p-bold">Contact No.: {content.contact_no}</p>
+            {content && content.email && content.contact_no &&
+              <>
+                <p className="p-bold">Email: {content.email}</p>
+                <p className="p-bold">Contact No.: {content.contact_no}</p>
+              </>
             }
           </ContentCard>
         </>
