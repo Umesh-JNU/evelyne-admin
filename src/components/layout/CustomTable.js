@@ -1,5 +1,5 @@
 import { Button, Card, Form, InputGroup, Table } from "react-bootstrap";
-import { FaEye, FaSearch, FaTrashAlt } from "react-icons/fa";
+import { FaEdit, FaEye, FaSearch, FaTrashAlt } from "react-icons/fa";
 import CustomSkeleton from "./CustomSkeleton";
 import CustomPagination from "./CustomPagination";
 import { useNavigate } from "react-router-dom";
@@ -134,6 +134,14 @@ export const DeleteButton = ({ onClick }) => {
   return (
     <Button onClick={onClick} type="danger" className="btn btn-danger ms-2">
       <FaTrashAlt className="m-auto" />
+    </Button>
+  );
+};
+
+export const EditButton = ({ onClick }) => {
+  return (
+    <Button onClick={onClick} variant="success" className="btn me-2">
+      <FaEdit className="m-auto" />
     </Button>
   );
 };

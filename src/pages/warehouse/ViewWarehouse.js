@@ -144,7 +144,7 @@ const ViewWarehouse = () => {
       setModalShow={setModalShow}
       isImage={true}
       image_url={warehouse?.image}
-      keyProps={{ "Name": "name", "Description": "desc", "Capacity": "capacity", "Filled": "filled", "Created At": "createdAt", "Last Update": "updatedAt" }}
+      keyProps={{ "Name": "name", "Description": "desc", "Initial Value ($)": "capacity", "Current Value ($)": "filled", "Country": "countryName", "Created At": "createdAt", "Last Update": "updatedAt" }}
       reducerProps={{ error, loading, dispatch }}
     >
       <Row className="mt-4">

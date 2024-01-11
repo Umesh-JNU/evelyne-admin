@@ -1,7 +1,7 @@
 import useTitle from "./Title";
 import CustomPagination from "./CustomPagination";
 import CustomSkeleton from "./CustomSkeleton";
-import CustomTable, { DeleteButton, ViewButton } from "./CustomTable";
+import CustomTable, { DeleteButton, ViewButton, EditButton } from "./CustomTable";
 import Header from "./Header";
 import Footer from "./Footer";
 import NotFound from "./NotFound";
@@ -20,6 +20,7 @@ export {
   CustomTable,
   DeleteButton,
   ViewButton,
+  EditButton,
   Header,
   Footer,
   NotFound,

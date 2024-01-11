@@ -32,7 +32,7 @@ export default function EditWarehouse(props) {
         name: "name",
         required: true,
       }
-    }, 
+    },
     {
       type: "text",
       col: 12,
@@ -47,8 +47,8 @@ export default function EditWarehouse(props) {
       col: 12,
       props: {
         type: "number",
-        label: "Capacity",
-        placeholder: "Warehouse Capacity",
+        label: "Initial Value ($)",
+        placeholder: "Warehouse Initial Value",
         name: "capacity",
         required: true,
       }

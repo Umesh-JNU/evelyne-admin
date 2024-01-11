@@ -30,7 +30,7 @@ import ViewOrder from "./orders/ViewOrder";
 
 import Content from "./contents/Content";
 import AddContent from "./contents/AddContent";
-import ViewContent from "./contents/ViewContent";
+import EditContent from "./contents/EditContent";
 
 export { 
   Dashboard, AdminLoginScreen, ViewProfile,
@@ -41,5 +41,5 @@ export {
   TransactionTable, AddTransaction, ViewTransaction, 
   InvoiceTable, AddInvoice, ViewInvoice, 
   OrderTable, AddOrder, ViewOrder, 
-  Content, AddContent, ViewContent 
+  Content, AddContent, EditContent 
 };

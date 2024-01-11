@@ -294,6 +294,7 @@ const AddForm = (props) => {
   const navigate = useNavigate();
 
   const {
+    addEditText,
     title,
     data,
     setData,
@@ -334,7 +335,7 @@ const AddForm = (props) => {
       <Row>
         <Col>
           <Card>
-            <Card.Header as={"h4"}>Add Details</Card.Header>
+            <Card.Header as={"h4"}>{addEditText ? addEditText : 'Add'} Details</Card.Header>
             <Form onSubmit={submitHandler}>
               <Card.Body>
                 <Row>
@@ -369,9 +370,9 @@ const AddForm = (props) => {
                         return (
                           <Col key={props.name} md={col}>
                             <SelectInput
-                              {...props}
                               onChange={(e) => setData({ ...data, [props.name]: e.target.value })}
                               value={data[props.name]}
+                              {...props}
                             />
                           </Col>
                         )

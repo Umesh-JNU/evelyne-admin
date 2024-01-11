@@ -65,10 +65,11 @@ export default function Warehouse() {
     "S.No",
     "Image",
     "Name",
-    "Capacity",
-    "Filled",
+    "Initial Value ($)",
+    "Current Value ($)",
     "Manager",
     "Controller",
+    "Country",
     "Action",
   ];
 
@@ -117,6 +118,7 @@ export default function Warehouse() {
                     onClick={() => showModelHandler(warehouse.controller)}
                   />
                 </td>
+                <td>{warehouse.countryName}</td>
                 <td>
                   <ViewButton
                     onClick={() => navigate(`/admin/view/warehouse/${warehouse.id}`)}

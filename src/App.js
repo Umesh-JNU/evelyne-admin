@@ -13,7 +13,7 @@ import {
   TransactionTable, AddTransaction, ViewTransaction,
   InvoiceTable, AddInvoice, ViewInvoice,
   OrderTable, AddOrder, ViewOrder,
-  Content, AddContent, ViewContent
+  Content, AddContent, EditContent
 } from "./pages";
 
 function App() {
@@ -51,8 +51,7 @@ function App() {
     { path: "/admin/view/order/:id", comp: <ViewOrder /> },
     { path: "/admin/contents", comp: <Content /> },
     { path: "/admin/content/create", comp: <AddContent /> },
-    { path: "/admin/view/content/:id", comp: <ViewContent /> },
-
+    { path: "/admin/content/edit", comp: <EditContent /> },
   ];
 
   return (

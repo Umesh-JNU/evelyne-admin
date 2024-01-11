@@ -395,3 +395,14 @@ table.table {
   width: 30px;
   height: 30px;
 }
+
+/* ------------------------ JODIT ------------------------- */
+.jodit-status-bar .jodit-status-bar__item.jodit-status-bar__item-right .jodit-status-bar-link,
+.jodit-add-new-line.jodit-add-new-line_after {
+  display: none;
+}
+
+.jodit-wysiwyg {
+  max-height: 40vh;
+  overflow: auto;
+}
