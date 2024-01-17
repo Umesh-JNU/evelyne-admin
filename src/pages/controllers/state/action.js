@@ -37,7 +37,7 @@ export const getAll = async (dispatch, token, curPage, resultPerPage, query) => 
 export const del = async (dispatch, token, id) => {
   if (
     window.confirm(
-      "Are you sure you want to delete this user?\n\nNote: All Related orders and addresses will also be deleted."
+      "Are you sure you want to delete this controller?"
     ) === true
   ) {
     try {
@@ -52,11 +52,24 @@ export const del = async (dispatch, token, id) => {
   }
 }
 
+export const unDelete = async (dispatch, token, id) => {
+  console.log({ token })
+  try {
+    dispatch({ type: "FETCH_REQUEST" });
+    await axiosInstance.put(`/api/admin/user/${id}/undelete`, {}, {
+      headers: { Authorization: token },
+    });
+    dispatch({ type: "UN_DELETE_SUCCESS", payload: id });
+  } catch (error) {
+    dispatch({ type: "FETCH_FAIL", payload: getError(error) });
+  }
+}
+
 export const update = async (dispatch, token, id, userInfo) => {
   try {
     dispatch({ type: "UPDATE_REQUEST" });
 
-    await axiosInstance.put(`/api/admin/user/${id}`, {...userInfo, role: 'controller'}, {
+    await axiosInstance.put(`/api/admin/user/${id}`, { ...userInfo, role: 'controller' }, {
       headers: { Authorization: token },
     });
 

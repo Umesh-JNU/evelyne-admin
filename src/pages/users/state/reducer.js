@@ -28,12 +28,35 @@ export default function userReducer(state, action) {
 
     case "DELETE_SUCCESS":
       const deleteduserId = action.payload;
-      const updatedusers = state.users.filter(user => user.id !== deleteduserId);
-      const updatedusersCount = state.usersCount - 1;
+      // const updatedusers = state.users.filter(user => user.id !== deleteduserId);
+      const updatedusers = state.users.map(user => {
+        if (user.id === deleteduserId) {
+          return { ...user, deletedAt: new Date().toISOString() }
+        }
+        return user;
+      });
+      // const updatedusersCount = state.usersCount - 1;
+      const updatedusersCount = state.usersCount;
       return {
         ...state,
         users: updatedusers,
         usersCount: updatedusersCount,
+        loading: false
+      };
+
+    case "UN_DELETE_SUCCESS":
+      const userId = action.payload;
+      const updatedusers_ = state.users.map(user => {
+        if (user.id === userId) {
+          return { ...user, deletedAt: null }
+        }
+        return user;
+      });
+
+      return {
+        ...state,
+        users: updatedusers_,
+        usersCount: state.usersCount,
         loading: false
       };
 

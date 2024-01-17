@@ -11,9 +11,10 @@ import {
   CustomTable,
   ViewButton,
   DeleteButton,
+  EditButton,
 } from "../../components";
 import managerReducer from "./state/reducer";
-import { getAll, del } from "./state/action";
+import { getAll, del, unDelete } from "./state/action";
 import { toastOptions } from "../../utils/error";
 
 export default function Managers() {
@@ -36,6 +37,10 @@ export default function Managers() {
 
   const deleteManager = async (id) => {
     await del(dispatch, token, id);
+  };
+
+  const reCreateUser = async (id) => {
+    await unDelete(dispatch, token, id);
   };
 
   useEffect(() => {
@@ -112,7 +117,10 @@ export default function Managers() {
                   <ViewButton
                     onClick={() => navigate(`/admin/view/manager/${manager.id}`)}
                   />
-                  <DeleteButton onClick={() => deleteManager(manager.id)} />
+                  {manager.deletedAt ?
+                    <EditButton onClick={() => reCreateUser(manager.id)} margin="ms-2" /> :
+                    <DeleteButton onClick={() => deleteManager(manager.id)} />
+                  }
                 </td>
               </tr>
             ))}

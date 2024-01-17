@@ -138,9 +138,9 @@ export const DeleteButton = ({ onClick }) => {
   );
 };
 
-export const EditButton = ({ onClick }) => {
+export const EditButton = ({ onClick, margin }) => {
   return (
-    <Button onClick={onClick} variant="success" className="btn me-2">
+    <Button onClick={onClick} variant="success" className={`btn ${margin ? margin : 'me-2'}`}>
       <FaEdit className="m-auto" />
     </Button>
   );

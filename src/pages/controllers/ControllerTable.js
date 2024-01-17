@@ -12,10 +12,11 @@ import {
   ViewButton,
   DeleteButton,
   ArrayView,
+  EditButton,
 } from "../../components";
 import controllerReducer from "./state/reducer";
 import { IoMdOpen } from "react-icons/io"
-import { getAll, del } from "./state/action";
+import { getAll, del, unDelete } from "./state/action";
 import { toastOptions } from "../../utils/error";
 
 export default function Controllers() {
@@ -47,6 +48,10 @@ export default function Controllers() {
     await del(dispatch, token, id);
   };
 
+  const reCreateUser = async (id) => {
+    await unDelete(dispatch, token, id);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       await getAll(dispatch, token, curPage, resultPerPage, query)
@@ -55,7 +60,7 @@ export default function Controllers() {
   }, [token, curPage, resultPerPage, query]);
 
   useEffect(() => {
-    if(error) toast.error(error, toastOptions);
+    if (error) toast.error(error, toastOptions);
   }, [error]);
 
   const numOfPages = Math.ceil(controllersCount / resultPerPage);
@@ -114,7 +119,7 @@ export default function Controllers() {
                 <td>{controller.email}</td>
                 <td>{controller.mobile_no}</td>
                 <td>
-                <IoMdOpen
+                  <IoMdOpen
                     className="open-model"
                     onClick={() => showModelHandler(controller.warehouses)}
                   />
@@ -126,7 +131,10 @@ export default function Controllers() {
                   <ViewButton
                     onClick={() => navigate(`/admin/view/controller/${controller.id}`)}
                   />
-                  <DeleteButton onClick={() => deleteController(controller.id)} />
+                  {controller.deletedAt ?
+                    <EditButton onClick={() => reCreateUser(controller.id)} margin="ms-2" /> :
+                    <DeleteButton onClick={() => deleteController(controller.id)} />
+                  }
                 </td>
               </tr>
             ))}

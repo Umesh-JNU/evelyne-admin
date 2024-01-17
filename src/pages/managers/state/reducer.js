@@ -36,12 +36,33 @@ export default function managerReducer(state, action) {
 
     case "DELETE_SUCCESS":
       const deletedmanagerId = action.payload;
-      const updatedmanagers = state.managers.filter(manager => manager.id !== deletedmanagerId);
-      const updatedmanagersCount = state.managersCount - 1;
+      const updatedmanagers = state.managers.map(manager => {
+        if (manager.id === deletedmanagerId) {
+          return { ...manager, deletedAt: new Date().toISOString() }
+        }
+        return manager;
+      });
+
       return {
         ...state,
         managers: updatedmanagers,
-        managersCount: updatedmanagersCount,
+        managersCount: state.managersCount,
+        loading: false
+      };
+
+    case "UN_DELETE_SUCCESS":
+      const managerId = action.payload;
+      const updatedmanagers_ = state.managers.map(manager => {
+        if (manager.id === managerId) {
+          return { ...manager, deletedAt: null }
+        }
+        return manager;
+      });
+
+      return {
+        ...state,
+        managers: updatedmanagers_,
+        managersCount: state.managersCount,
         loading: false
       };
 

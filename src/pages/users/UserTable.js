@@ -11,9 +11,10 @@ import {
   CustomTable,
   ViewButton,
   DeleteButton,
+  EditButton,
 } from "../../components";
 import userReducer from "./state/reducer";
-import { getAll, del } from "./state/action";
+import { getAll, del, unDelete } from "./state/action";
 import { toastOptions } from "../../utils/error";
 
 export default function Users() {
@@ -36,6 +37,10 @@ export default function Users() {
 
   const deleteUser = async (id) => {
     await del(dispatch, token, id);
+  };
+
+  const reCreateUser = async (id) => {
+    await unDelete(dispatch, token, id);
   };
 
   useEffect(() => {
@@ -112,7 +117,10 @@ export default function Users() {
                   <ViewButton
                     onClick={() => navigate(`/admin/view/user/${user.id}`)}
                   />
-                  <DeleteButton onClick={() => deleteUser(user.id)} />
+                  {user.deletedAt ?
+                    <EditButton onClick={() => reCreateUser(user.id)} margin="ms-2" /> :
+                    <DeleteButton onClick={() => deleteUser(user.id)} />
+                  }
                 </td>
               </tr>
             ))}

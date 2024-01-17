@@ -35,11 +35,11 @@ export const getAll = async (dispatch, token, curPage, resultPerPage, query) => 
 };
 
 export const del = async (dispatch, token, id) => {
-  if (
-    window.confirm(
-      "Are you sure you want to delete this user?\n\nNote: All Related orders and addresses will also be deleted."
-    ) === true
-  ) {
+  // if (
+  //   window.confirm(
+  //     "Are you sure you want to delete this user?\n\nNote: All Related orders and addresses will also be deleted."
+  //   ) === true
+  // ) {
     try {
       dispatch({ type: "FETCH_REQUEST" });
       await axiosInstance.delete(`/api/admin/user/${id}`, {
@@ -49,6 +49,19 @@ export const del = async (dispatch, token, id) => {
     } catch (error) {
       dispatch({ type: "FETCH_FAIL", payload: getError(error) });
     }
+  // }
+}
+
+export const unDelete = async (dispatch, token, id) => {
+  console.log({ token })
+  try {
+    dispatch({ type: "FETCH_REQUEST" });
+    await axiosInstance.put(`/api/admin/user/${id}/undelete`, {}, {
+      headers: { Authorization: token },
+    });
+    dispatch({ type: "UN_DELETE_SUCCESS", payload: id });
+  } catch (error) {
+    dispatch({ type: "FETCH_FAIL", payload: getError(error) });
   }
 }
 

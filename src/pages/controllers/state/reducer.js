@@ -36,12 +36,31 @@ export default function controllerReducer(state, action) {
 
     case "DELETE_SUCCESS":
       const deletedcontrollerId = action.payload;
-      const updatedcontrollers = state.controllers.filter(controller => controller.id !== deletedcontrollerId);
-      const updatedcontrollersCount = state.controllersCount - 1;
+      const updatedcontrollers = state.controllers.map(controller => {
+        if (controller.id === deletedcontrollerId) {
+          return { ...controller, deletedAt: new Date().toISOString() }
+        }
+        return controller;
+      });
       return {
         ...state,
         controllers: updatedcontrollers,
-        controllersCount: updatedcontrollersCount,
+        controllersCount: state.controllersCount,
+        loading: false
+      };
+
+    case "UN_DELETE_SUCCESS":
+      const controllerId = action.payload;
+      const updatedcontrollers_ = state.controllers.map(controller => {
+        if (controller.id === controllerId) {
+          return { ...controller, deletedAt: null };
+        }
+        return controller;
+      });
+      return {
+        ...state,
+        controllers: updatedcontrollers_,
+        controllersCount: state.controllersCount,
         loading: false
       };
 
