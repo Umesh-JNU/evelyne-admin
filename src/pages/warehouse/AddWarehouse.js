@@ -87,7 +87,7 @@ export default function AddWarehouse() {
     await create(dispatch, token, {
       ...info,
       capacity: parseInt(info.capacity),
-      country: JSON.parse(info.country)
+      ...JSON.parse(info.country)
     });
     resetForm();
   };
