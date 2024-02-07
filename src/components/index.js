@@ -16,7 +16,8 @@ import {
   MotionDiv,
   ViewCard,
   AddForm, EditForm, TextInput, CheckInput, SelectInput, RadioInput,
-  SubmitButton
+  SubmitButton,
+  CountUp
 } from "./layout";
 
 import ArrayView from "./listView/ArrayView";
@@ -42,5 +43,6 @@ export {
   AutocompleteSearch,
   ViewCard,
   AddForm, EditForm, TextInput, CheckInput, SelectInput, RadioInput,
-  SubmitButton
+  SubmitButton,
+  CountUp
 };
