@@ -2,6 +2,7 @@ export default function userReducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
     case "FETCH_DETAILS_REQUEST":
+      return { ...state, loading: true };
     case "ADD_REQUEST":
       return { ...state, loadingAdd: true };
     case "UPDATE_REQUEST":

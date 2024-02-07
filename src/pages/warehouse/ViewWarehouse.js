@@ -9,7 +9,7 @@ import { getDetails, removeHandler } from "./state/action";
 import EditWarehouseModel from "./EditWarehouse.js";
 import AddMangerModel from "./AddManagerModel";
 import AddControllerModel from "./AddControllerModel";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
+import { Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
 import { getError, toastOptions } from "../../utils/error";
 import { FaTrashAlt } from "react-icons/fa";
@@ -37,6 +37,8 @@ const ViewWarehouse = () => {
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [selectedItem, setSelectedItem] = useState("daily");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   const handleReportTime = (time) => {
     setSelectedItem(time);
@@ -65,9 +67,10 @@ const ViewWarehouse = () => {
     try {
       let url = `/api/report/${id}/?year=${year}&month=${month}&date=${date}`;
       if (type === "bond") {
-        url = `/api/report/bond-report/${id}/?date=${date}`
+        url = `/api/report/bond-report/${id}/?FROM=${from}&TO=${to}`
       }
 
+      setDisabled(true);
       const { data } = await axiosInstance.get(url,
         {
           responseType: "blob",
@@ -75,7 +78,7 @@ const ViewWarehouse = () => {
             Accept: "application/pdf", Authorization: token
           }
         });
-      
+
       console.log({ data })
       const filename = "report.pdf";
       const blobObj = new Blob([data], { type: "application/pdf" });
@@ -83,14 +86,20 @@ const ViewWarehouse = () => {
       anchorlink.href = window.URL.createObjectURL(blobObj)
       anchorlink.setAttribute("download", filename);
       anchorlink.click();
+
+      setTimeout(() => {
+        setDisabled(false);
+      }, 1500);
     }
     catch (err) {
       console.log({ err });
-      toast.error(getError(err), toastOptions);
+      toast.error("Bad Request - No Orders", toastOptions);
+      setDisabled(false);
     }
   }
 
   const [modalShow, setModalShow] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [showManager, setShowManager] = useState(false);
   const [showController, setShowController] = useState(false);
   const [{ loading, error, loadingUpdate, warehouse, success }, dispatch] = useReducer(reducer, {
@@ -214,7 +223,7 @@ const ViewWarehouse = () => {
                 ))}
               </div>
               <div className="mt-3 w-100">
-                {selectedItem === "daily" &&
+                {selectedItem === "daily" && <>
                   <Form.Group className="mb-3">
                     <Form.Control
                       value={date}
@@ -223,28 +232,51 @@ const ViewWarehouse = () => {
                       onChange={(e) => setDate(e.target.value)}
                     />
                   </Form.Group>
-                }
+                  <Button
+                    className='m-auto d-block'
+                    variant="outline-info"
+                    size="lg"
+                    style={{ backgroundColor: "#edf4fd" }}
+                    onClick={downloadPDF}
+                    disabled={!date || disabled}>
+                    {disabled ? <Spinner size="sm" /> : <>Get Report <HiDownload /></>}
+                  </Button>
+                </>}
 
-                {selectedItem === "monthly" &&
+                {selectedItem === "monthly" && <>
                   <Form.Select className="mb-3" onChange={(e) => setMonth(e.target.value)}>
                     <option key="blankChoice" hidden value>
                       Select Month
                     </option>
                     {months.map((m, i) => <option key={m} value={i + 1}>{m}</option>)}
                   </Form.Select>
-                }
+                  <Button
+                    className='m-auto d-block'
+                    variant="outline-info"
+                    size="lg"
+                    style={{ backgroundColor: "#edf4fd" }}
+                    onClick={downloadPDF}
+                    disabled={!month || disabled}>
+                    {disabled ? <Spinner size="sm" /> : <>Get Report <HiDownload /></>}
+                  </Button>
+                </>}
 
-                {selectedItem === "yearly" &&
+                {selectedItem === "yearly" && <>
                   <Form.Select className="mb-3" onChange={(e) => setYear(e.target.value)}>
                     <option key="blankChoice" hidden value>Select Year</option>
                     {years().map((y) => <option key={y} value={y}>{y}</option>)}
                   </Form.Select>
-                }
+                  <Button
+                    className='m-auto d-block'
+                    variant="outline-info"
+                    size="lg"
+                    style={{ backgroundColor: "#edf4fd" }}
+                    onClick={downloadPDF}
+                    disabled={!year || disabled}>
+                    {disabled ? <Spinner size="sm" /> : <>Get Report <HiDownload /></>}
+                  </Button>
+                </>}
               </div>
-
-              <Button variant="outline-info" size="lg" style={{ backgroundColor: "#edf4fd" }} onClick={downloadPDF}>
-                Get Report <HiDownload />
-              </Button>
             </Card.Body>
           </Card>
         </Col>
@@ -258,19 +290,33 @@ const ViewWarehouse = () => {
               <h6>Get every single detail for Bond report of orders that you are managing.</h6>
               <p className="m-3">Select the date for bond Report</p>
 
-              <div className="mt-3 w-100">
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    value={date}
-                    type="date"
-                    placeholder="Select Date"
-                    onChange={(e) => setDate(e.target.value)}
-                  />
-                </Form.Group>
-              </div>
+              <Row className="mt-3 w-100">
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>From</Form.Label>
+                    <Form.Control
+                      value={from}
+                      type="date"
+                      placeholder="Select Date"
+                      onChange={(e) => setFrom(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col md={6}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>To</Form.Label>
+                    <Form.Control
+                      value={to}
+                      type="date"
+                      placeholder="Select Date"
+                      onChange={(e) => setTo(e.target.value)}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
-              <Button variant="outline-info" size="lg" style={{ backgroundColor: "#edf4fd" }} onClick={() => downloadPDF("bond")}>
-                Get Report <HiDownload />
+              <Button variant="outline-info" size="lg" style={{ backgroundColor: "#edf4fd" }} onClick={() => downloadPDF("bond")} disabled={(!from || !to) || disabled}>
+                {disabled ? <Spinner size="sm" /> : <>Get Report <HiDownload /></>}
               </Button>
             </Card.Body>
           </Card>
@@ -281,20 +327,24 @@ const ViewWarehouse = () => {
         show={modalShow}
         onHide={() => setModalShow(false)}
       />
-      {showManager && <AddMangerModel
-        show={showManager}
-        onHide={() => setShowManager(false)}
-        manager={warehouse?.manager}
-        reload={async () => { await getDetails(dispatch, token, id); }}
-      />}
-      {showController && <AddControllerModel
-        show={showController}
-        onHide={() => setShowController(false)}
-        controllerList={warehouse.controller}
-        reload={async () => { await getDetails(dispatch, token, id); }}
-      />}
+      {
+        showManager && <AddMangerModel
+          show={showManager}
+          onHide={() => setShowManager(false)}
+          manager={warehouse?.manager}
+          reload={async () => { await getDetails(dispatch, token, id); }}
+        />
+      }
+      {
+        showController && <AddControllerModel
+          show={showController}
+          onHide={() => setShowController(false)}
+          controllerList={warehouse.controller}
+          reload={async () => { await getDetails(dispatch, token, id); }}
+        />
+      }
       {!showController && !showManager && !modalShow && < ToastContainer />}
-    </ViewCard>
+    </ViewCard >
   );
 };
 

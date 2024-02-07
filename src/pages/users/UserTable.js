@@ -66,11 +66,12 @@ export default function Users() {
     "Mobile No.",
     "Country",
     "City",
-    "Role",
+    // "Role",
     "Reg. Date",
     "Action",
   ];
 
+  console.log({ loading })
   useTitle("Users Table");
   return (
     <MotionDiv>
@@ -111,7 +112,7 @@ export default function Users() {
                 <td>{user.mobile_no}</td>
                 <td>{user.country}</td>
                 <td>{user.city}</td>
-                <td>{user.userRole?.role}</td>
+                {/* <td>{user.userRole?.role}</td> */}
                 <td>{getDateTime(user.createdAt)}</td>
                 <td>
                   <ViewButton

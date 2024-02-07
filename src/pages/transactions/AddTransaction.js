@@ -123,6 +123,7 @@ export default function AddController() {
           return;
         }
         await create(dispatch, token, { ...info, orderId: order.id });
+        break;
 
       case 'warehouse':
         if (!warehouse) {
@@ -130,6 +131,10 @@ export default function AddController() {
           return;
         }
         await create(dispatch, token, { ...info, warehouseId: warehouse.id });
+        break;
+
+      default:
+        break;
     }
 
     resetForm();

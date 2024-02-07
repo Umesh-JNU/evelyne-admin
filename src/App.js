@@ -11,7 +11,6 @@ import {
   ControllerTable, AddController, ViewController,
   WarehouseTable, AddWarehouse, ViewWarehouse,
   TransactionTable, AddTransaction, ViewTransaction,
-  InvoiceTable, AddInvoice, ViewInvoice,
   OrderTable, AddOrder, ViewOrder,
   Content, AddContent, EditContent
 } from "./pages";
@@ -43,9 +42,6 @@ function App() {
     { path: "/admin/transactions", comp: <TransactionTable /> },
     { path: "/admin/transaction/create", comp: <AddTransaction /> },
     { path: "/admin/view/transaction/:id", comp: <ViewTransaction /> },
-    { path: "/admin/invoices", comp: <InvoiceTable /> },
-    { path: "/admin/invoice/create", comp: <AddInvoice /> },
-    { path: "/admin/view/invoice/:id", comp: <ViewInvoice /> },
     { path: "/admin/orders", comp: <OrderTable /> },
     { path: "/admin/order/create", comp: <AddOrder /> },
     { path: "/admin/view/order/:id", comp: <ViewOrder /> },

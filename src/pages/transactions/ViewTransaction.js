@@ -87,6 +87,12 @@ const ViewTransaction = () => {
               </Col>
             </>
         }
+
+        <h5>Comments</h5>
+        {console.log(transaction?.comments, "Comments")}
+        {transaction?.comments.length > 0 ? transaction.comments.map(({ comment }) => (
+          <p className="m-0" key={comment}>- {comment}</p>
+        )) : <p>No Comments</p>}
       </Row>
       <div className="mt-3 d-flex align-items-center">
         <p className="p-bold m-0 me-3">Transaction Status</p>

@@ -20,10 +20,6 @@ import TransactionTable from "./transactions/TransactionTable";
 import AddTransaction from "./transactions/AddTransaction";
 import ViewTransaction from "./transactions/ViewTransaction";
 
-import InvoiceTable from "./invoice/InvoiceTable";
-import AddInvoice from "./invoice/AddInvoice";
-import ViewInvoice from "./invoice/ViewInvoice";
-
 import OrderTable from "./orders/OrderTable";
 import AddOrder from "./orders/AddOrder";
 import ViewOrder from "./orders/ViewOrder";
@@ -39,7 +35,6 @@ export {
   ControllerTable, AddController, ViewController, 
   WarehouseTable, AddWarehouse, ViewWarehouse, 
   TransactionTable, AddTransaction, ViewTransaction, 
-  InvoiceTable, AddInvoice, ViewInvoice, 
   OrderTable, AddOrder, ViewOrder, 
   Content, AddContent, EditContent 
 };

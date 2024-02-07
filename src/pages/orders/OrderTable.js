@@ -72,8 +72,8 @@ export default function Orders() {
     "Status",
     "Action",
   ];
-
-  useTitle("orders Table");
+  console.log({ loading })
+  useTitle("Orders Table");
   return (
     <MotionDiv>
       {error ? (
